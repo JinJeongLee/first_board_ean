@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="Board">
+
+<insert id="insertBoard">
+	insert into tb_board
+		(B_NO, 
+		B_TITLE, B_CONTENT, B_WRITER, B_WRITE_DATE, B_COUNT, 
+		M_ID, 
+		B_PASSWORD, BT_NO, IS_MEMBER)
+	values(
+		(select nvl(max(b_no), 0)+1 from tb_board)
+		, #{b_title}, #{b_content}, #{b_writer}, sysdate, 0
+		, #{m_id}
+		, #{b_password}, #{bt_no}, 'N'
+	)
+</insert>
+
+<select id="selectBoardList" resultType="Board">
+	select b.*, t.bt_name 
+	from tb_board b
+	left outer join tb_board_type t 
+    on b.bt_no = t.bt_no
+    order by b_no desc
+</select>
+
+
+</mapper>
