@@ -1,0 +1,107 @@
+@charset "UTF-8";
+
+#section{
+	margin: 0 auto;
+	width: 800px;
+}
+
+		#top{
+            margin-top: 160px;
+            width: 800px;
+            height: 58px;
+            background-color: #4B4DB2;
+            text-align: center;
+        }
+        #top_text{
+            color: white;
+            font-size: 12px;
+            font-family: NotoSansB;
+            margin-top: 20px;
+            display: block;
+            padding-top: 22px;
+        }
+        #mid{
+            width: 800px;
+            height: 440px;
+            background-color: rgb(244, 244, 244);
+        }
+        #mid_text{
+            padding-top: 70px;
+            margin-bottom: 60px;
+            text-align: center;
+            font-size: 17px;
+            font-family: NotoSansB;
+            color: #5E5E5E;
+        }
+        #f_section{
+            display: block;
+            margin: 0 auto;
+            width: 380px;
+        }
+        #m_id, #password{
+            width: 380px;
+            height: 40px;
+            margin-bottom: 10px;
+            border: 1px solid rgb(158, 158, 158);
+            border-radius: 3px;
+            font-size: 12px;
+            font-family: NotoSansR;
+        }
+        #m_id::placeholder, #password::placeholder{
+            font-family: NotoSansR;
+            font-size: 12px;
+            padding-left: 4px;
+        }
+        #m_section{
+            width: 380px;
+            font-size: 12px;
+            position: relative;
+            margin: 0 auto;
+            margin-bottom: 23px;
+            display: block;
+            font-family: NotoSansR;
+            font-size: 12px;
+            
+        }
+        #autoLogin{
+            margin-right: 3px;
+            font-size: 12px;
+            color: rgb(94, 94, 94);
+            font-family: NotoSansR;
+        }
+        input[id="autoLogin"] {
+		  position: relative;
+		  top: 2px;
+		}
+        #saveId{
+            font-size: 12px;
+            color: rgb(94, 94, 94);
+            font-family: NotoSansR;
+        }
+        input[id="saveId"] {
+		  position: relative;
+		  top: 2px;
+		}
+        #findPwd{
+            float: right;
+            color: #4B4DB2;
+            margin-top: 4px;
+			font-family: NotoSansB;
+			cursor: pointer;
+        }
+        #login{
+            width: 380px;
+            height: 40px;
+            background-color: white;
+            color: rgb(75, 77, 178);
+            border: 1px solid rgb(75, 77, 178);
+            font-size: 12px;
+            font-family: NotoSansB;
+            margin: 0 auto;
+            margin-bottom: 100px;
+            display: block;
+        }
+        #login:hover{
+        	background-color: rgb(75, 77, 178);
+            color: white;
+        }

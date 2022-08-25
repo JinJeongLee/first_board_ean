@@ -183,7 +183,7 @@
 			return;
 		}
 		$.ajax({
-			url: "<%=request.getContextPath()%>/board/insert",
+			url: "<%=request.getContextPath()%>/insert",
 			type: "post",
 			data: {b_title : $('#board_title').val()
 				, b_content : $('#board_content1').val()

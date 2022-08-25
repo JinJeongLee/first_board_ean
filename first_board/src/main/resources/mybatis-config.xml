@@ -7,10 +7,12 @@
 
 	<typeAliases>
 		<typeAlias type="com.ean.first_board.board.domain.Board" alias="Board"/>
+		<typeAlias type="com.ean.first_board.board.domain.Member" alias="Member"/>
 	</typeAliases>
 	
 	<mappers>
 		<mapper resource="mappers/board-mapper.xml" />
+		<mapper resource="mappers/member-mapper.xml" />
 	</mappers>
 
 	

@@ -120,7 +120,7 @@
 <script>
 //글쓰기 버튼 누르면 이동
 	$("#write_btn").on("click", function(){
-		location.href="<%= request.getContextPath()%>/board/insert";
+		location.href="<%= request.getContextPath()%>/insert";
 	})
 	
 	$(".tb_read").click(function(){
