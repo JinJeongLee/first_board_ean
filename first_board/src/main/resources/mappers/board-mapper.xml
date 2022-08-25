@@ -7,12 +7,12 @@
 		(B_NO, 
 		B_TITLE, B_CONTENT, B_WRITER, B_WRITE_DATE, B_COUNT, 
 		M_ID, 
-		B_PASSWORD, BT_NO, IS_MEMBER)
+		BT_NO)
 	values(
 		(select nvl(max(b_no), 0)+1 from tb_board)
 		, #{b_title}, #{b_content}, #{b_writer}, sysdate, 0
 		, #{m_id}
-		, #{b_password}, #{bt_no}, 'N'
+		, #{bt_no}
 	)
 </insert>
 
@@ -24,5 +24,12 @@
     order by b_no desc
 </select>
 
+<select id="selectBoard" resultType="Board" parameterType="_int">
+	select b.b_no, b_title, b_content, b_writer, b_write_date, b_count, f.*, c_writer, c_write_Date, c_comment
+	from tb_board b
+	left outer join tb_file f on b.b_no = f.b_no
+	left outer join tb_comment c on b.b_no = c.b_no
+	where b.b_no = #{b_no}
+</select>
 
 </mapper>

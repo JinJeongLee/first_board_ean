@@ -10,4 +10,6 @@ public interface BoardService {
 	public int insertBoard(Board board);
 	
 	public List<Board> selectBoardList();
+	
+	public Board selectBoard(int b_no);
 }

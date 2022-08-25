@@ -339,6 +339,8 @@ hr{
 	background-color: white;
 }
 
+
+
 #projcet_main_menu_title_profile_wrap {
 	position: relative;
 }
@@ -447,12 +449,7 @@ hr{
 }
 
 .project_board_read_btn {
-	width: 115px;
-	height: 40px;
-	font-size: 14px;
-	font-family: NotoSansB;
-	color: white;
-	background-color: #4B4DB2;
+	
 	display: block;
 	margin: 70px auto 0px;
 	cursor: pointer;

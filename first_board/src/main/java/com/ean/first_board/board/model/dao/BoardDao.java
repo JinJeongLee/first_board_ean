@@ -25,4 +25,8 @@ public class BoardDao {
 		public List<Board> selectBoardList(){
 			return sqlsession.selectList("Board.selectBoardList");
 		}
+	// 게시글 읽기
+		public Board selectBoard(int b_no) {
+			return sqlsession.selectOne("Board.selectBoard", b_no);
+		}
 }

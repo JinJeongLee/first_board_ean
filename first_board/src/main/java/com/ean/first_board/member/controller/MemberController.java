@@ -1,5 +1,6 @@
 package com.ean.first_board.member.controller;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
@@ -42,8 +43,21 @@ public class MemberController {
 		Member result = service.selectMember(member);
 		
 		session.setAttribute("loginSSInfo", result);
-		mv.setViewName("board/main");
+		
+		mv.setViewName("redirect:/");
 		return mv;
 	}
+
+	//로그아웃
+	@GetMapping("/logout")
+	public ModelAndView viewLogout(
+			ModelAndView mv
+			, HttpSession session
+			, HttpServletRequest request
+			, HttpServletResponse response) {
 	
+		request.getSession().invalidate(); // 세션 초기화 - 로그아웃에서만 사용 권장
+		mv.setViewName("redirect:/");
+		return mv;
+	}
 }

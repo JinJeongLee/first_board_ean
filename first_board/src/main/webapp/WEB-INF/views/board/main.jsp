@@ -122,7 +122,7 @@
 	$("#write_btn").on("click", function(){
 		location.href="<%= request.getContextPath()%>/insert";
 	})
-	
+	<%-- 
 	$(".tb_read").click(function(){
 		$.ajax({
 			url: "<%=request.getContextPath()%>/hr/employee/select",
@@ -137,8 +137,12 @@
 			}
 		});
 		
-	});
-	
+	}); --%>
+// 게시글 상세보기 페이지 이동
+$(".tb_read").on("click", function(){
+	var b_no = $(this).siblings().first().text() ;
+	location.href = "<%= request.getContextPath()%>/read?b_no="+b_no;
+})
 ////////날짜 유효성 ///////////
 //start input -> end min
 $("#att_date_start").on("input", function() {

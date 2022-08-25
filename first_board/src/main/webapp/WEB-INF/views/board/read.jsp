@@ -94,10 +94,10 @@
 .margin1{
 	margin-left: 50px;
 }
+
 /* grid box~! */
-#board_row3, #board_row4{
-	display: flex;
-	gap:10px;
+#update_delete_btn{
+	text-align: right;
 }
 
 /* 같은 폰트 적용 */
@@ -131,14 +131,21 @@
 		<div id="board_main_container">
 			<div id="project_board_read_wrap">
 				<div id="project_board_read_grid">
+				<div class="project_board_read_title">No. ${board.b_no }</div>
+				<div id="update_delete_btn">
+				<button class="btn_format_mini_gray">수정</button>
+				<button class="btn_format_mini_gray">삭제</button>
+				</div>
 				<div class="project_board_read_title">게시물 제목</div>
-				<div class="project_board_read_title" id="project_board_read_title">${project.pb_title }</div>
+				<div class="project_board_read_title" id="project_board_read_title">${board.b_title }</div>
 				<div class="project_board_read_title">게시물 내용</div>
-				<div class="project_board_read_content">${project.pb_content }</div>
+				<div class="project_board_read_content">${board.b_content }</div>
 				<div class="project_board_read_title">작성자</div>
-				<div class="project_board_read_content">${project.name }</div>
+				<div class="project_board_read_content">${board.b_writer }</div>
 				<div class="project_board_read_title">작성일</div>
-				<div class="project_board_read_content"></div>
+				<div class="project_board_read_content">${board.b_write_date }</div>
+				
+				<%-- 
 				<c:if test="${not empty fileList }">
 				<div class="project_board_read_title">파일 업로드</div>
 				<div class="project_board_read_file_wrap">
@@ -147,6 +154,8 @@
 					</c:forEach>
 				</div>
 				</c:if>
+				 --%>
+				<%-- 
 				<div class="project_board_read_hr"></div>
 				<div class="project_board_read_comemnt_title">댓글</div>
 				<div class="project_board_read_comemnt_content_flex">
@@ -154,8 +163,8 @@
 						<div class="project_board_read_comemnt_content_profile_wrap">
 							<div class="project_board_read_comemnt_content_profile_img"><c:if test="${not empty loginSSInfo.profile}"><img src="${loginSSInfo.profile}"></c:if></div>
 							<div class="project_board_read_comment_content_profile_flex">
-								<div class="project_board_read_comemnt_content_profile_name">${loginSSInfo.name }</div>
-								<div class="project_board_read_comemnt_content_profile_job">${loginSSInfo.job_title }</div>
+								<div class="project_board_read_comemnt_content_profile_name">${loginSSInfo.m_nickname }</div>
+								<div class="project_board_read_comemnt_content_profile_job">회원</div>
 							</div>
 						</div>
 						<div class="project_board_read_comemnt_content_input_wrap">
@@ -185,8 +194,10 @@
 						</div>
 					</c:forEach>
 				</div>
+				 --%>
+				
 			</div>
-			<button class="project_board_read_btn">확인</button>
+			<button class="project_board_read_btn btn_format_mini">확인</button>
 			</div>
 		
 		</div>

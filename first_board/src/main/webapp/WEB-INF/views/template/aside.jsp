@@ -6,23 +6,12 @@
 	<div id="login_info">
 	<c:if test="${not empty loginSSInfo}">
 		<div class="profile_circle">
-			<c:if test="${empty loginSSInfo.profile}">
-		    	<img id="profile" src="<%= request.getContextPath() %>/resources/images/clear.png">
-		    </c:if>
-		    <c:if test="${not empty loginSSInfo.profile}">
-		        <img id="profile" src="<%= request.getContextPath() %>/resources/images/profile.jpg">
-		   	</c:if>
+	        <img id="profile" src="<%= request.getContextPath() %>/resources/images/profile.jpg">
 		</div>
-		<div class="company_info font_r font_gray94 font_12px">${loginSSInfo.cp_name }</div>
-		<div class="person_info"><span class="font_b font_gray94 font_13px">${loginSSInfo.name }&nbsp;</span><span class="font_r font_gray94 font_13px">${loginSSInfo.job_title }</span></div>
+		<div class="company_info font_r font_gray94 font_12px">EanSoft</div>
+		<div class="person_info"><span class="font_b font_gray94 font_13px">${loginSSInfo.m_nickname }&nbsp;</span><span class="font_r font_gray94 font_13px">회원</span></div>
 	</c:if>
-	<c:if test="${not empty CompanySSinfo}">
-			<div class="profile_cp">
-				<img id="profile" src="<%= request.getContextPath() %>/resources/images/clear.png">
-			</div>
-			<div class="company_info font_r font_gray94 font_12px" style="margin-bottom: 50px;">${CompanySSinfo.cp_name}</div>
-	</c:if>
-		<c:if test="${not(empty loginSSInfo && empty CompanySSinfo) }">
+		<c:if test="${not empty loginSSInfo }">
 			<button class="btn_format_mini logout_btn" id="logout_btn">로그아웃</button>
 		</c:if>
 		<!-- <div id="test_login_btn_wrap">
@@ -53,9 +42,12 @@
 					<div class="left_menu_1depth_title" open_chk="f" id="board">
 								게시판
 					</div>
-					
 				</div>
-				
+				<div class="left_menu_wrap_1depth">
+					<div class="left_menu_1depth_title" open_chk="f" id="login_side">
+								로그인
+					</div>
+				</div>
 			</div>
 			
 		
@@ -122,6 +114,9 @@
 <script>
 	$('#board').click(function() {
 		location.href = '<%= request.getContextPath()%>/';
+	});
+	$('#login_side').click(function() {
+		location.href = '<%= request.getContextPath()%>/login';
 	});
 	
 </script>

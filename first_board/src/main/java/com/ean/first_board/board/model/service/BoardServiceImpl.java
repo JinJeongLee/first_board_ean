@@ -23,6 +23,11 @@ public class BoardServiceImpl implements BoardService {
 	public List<Board> selectBoardList() {
 		return dao.selectBoardList();
 	}
+
+	@Override
+	public Board selectBoard(int b_no) {
+		return dao.selectBoard(b_no);
+	}
 	
 
 	

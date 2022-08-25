@@ -7,7 +7,7 @@
 
 	<typeAliases>
 		<typeAlias type="com.ean.first_board.board.domain.Board" alias="Board"/>
-		<typeAlias type="com.ean.first_board.board.domain.Member" alias="Member"/>
+		<typeAlias type="com.ean.first_board.member.domain.Member" alias="Member"/>
 	</typeAliases>
 	
 	<mappers>

@@ -95,7 +95,7 @@
 	margin-left: 50px;
 }
 /* grid box~! */
-#board_row3, #board_row4{
+#board_row3{
 	display: flex;
 	gap:10px;
 }
@@ -154,13 +154,13 @@
 				        </select>
 				        <div class="font_title margin1" >첨부파일</div>
 				        <input type="file">
-			        </div>
+			        </div><!-- 
 			        <div id="board_row4">
 				        <div class="font_title" >닉네임</div>
 				        <input id="b_writer" type="text">
 				        <div class="font_title margin1" >비밀번호</div>
 				        <input id="b_password" type="text">
-			        </div>
+			        </div> -->
 			        <div id="btn_cancel_submit">
 			            <button type="button" id="board_cancel" class="btn_format_mini">취소</button>
 			            <button id="board_submit" type="button" class="btn_format_mini">등록</button>
@@ -188,8 +188,8 @@
 			data: {b_title : $('#board_title').val()
 				, b_content : $('#board_content1').val()
 				, bt_no : $('#board_type').val()
-				, b_writer : $('#b_writer').val()
-				, b_password : $('#b_password').val()
+				, b_writer : "${loginSSInfo.m_nickname}"
+				, m_id : "${loginSSInfo.m_id}"
 				} ,
 			dataType:"json",
 			success: function(result){

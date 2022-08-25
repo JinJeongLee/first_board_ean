@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.ean.first_board.board.domain.Board;
 import com.ean.first_board.board.model.service.BoardService;
@@ -28,8 +29,13 @@ public class BoardController {
 	public ModelAndView viewBoard(ModelAndView mv
 			, @RequestParam(name="list", required = false) List<Board> list
 			, HttpSession session
+			, RedirectAttributes rattr
 			) {
-
+		if(session.getAttribute("loginSSInfo") == null) {
+			rattr.addFlashAttribute("msg", "로그인 후 이용 가능합니다.");
+			mv.setViewName("member/login"); //로그인으로
+			return mv;
+		}
 		list = service.selectBoardList();
 		mv.addObject("boardList", list);
 		mv.setViewName("board/main");
@@ -39,8 +45,14 @@ public class BoardController {
 	@RequestMapping("/insert")
 	public ModelAndView viewInsertBoard(ModelAndView mv
 			, Board board
+			, HttpSession session
+			, RedirectAttributes rattr
 			) {
-		
+		if(session.getAttribute("loginSSInfo") == null) {
+			rattr.addFlashAttribute("msg", "로그인 후 이용 가능합니다.");
+			mv.setViewName("member/login"); //로그인으로
+			return mv;
+		}
 		mv.setViewName("board/insertBoard");
 		return mv;
 	}
@@ -52,23 +64,32 @@ public class BoardController {
 			, @RequestParam(name="b_content") String b_content
 			, @RequestParam(name="bt_no") int bt_no
 			, @RequestParam(name="b_writer") String b_writer
-			, @RequestParam(name="b_password") int b_password
+			, @RequestParam(name="m_id") String m_id
 			) {
 		board.setB_title(b_title);
 		board.setB_content(b_content);
 		board.setBt_no(bt_no);
 		board.setB_writer(b_writer);
-		board.setB_password(b_password);
+		board.setM_id(m_id);
 		
 		int result = service.insertBoard(board);
 		return result;
 	}
 	
-	@PostMapping("/select")
+	@GetMapping("/read")
 	public ModelAndView selectBoard(ModelAndView mv
 			, Board board
+			, HttpSession session
+			, RedirectAttributes rattr
+			, @RequestParam(name="b_no") int b_no
 			) {
-		
+		if(session.getAttribute("loginSSInfo") == null) {
+			rattr.addFlashAttribute("msg", "로그인 후 이용 가능합니다.");
+			mv.setViewName("member/login"); //로그인으로
+			return mv;
+		}
+		board.setB_no(b_no);
+		mv.addObject("board", service.selectBoard(b_no));
 		mv.setViewName("board/read");
 		return mv;
 	}

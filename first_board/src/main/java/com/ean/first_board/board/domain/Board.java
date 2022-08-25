@@ -15,9 +15,7 @@ public class Board {
 //	B_WRITE_DATE NOT NULL TIMESTAMP(6)   
 //	B_COUNT      NOT NULL NUMBER         
 //	M_ID                  VARCHAR2(20)   
-//	B_PASSWORD            NUMBER         
 //	BT_NO        NOT NULL NUMBER         
-//	IS_MEMBER    NOT NULL VARCHAR2(2)    
 	
 //	BT_NO   NOT NULL NUMBER       
 //	BT_NAME NOT NULL VARCHAR2(50) 
@@ -42,10 +40,8 @@ public class Board {
 	private Timestamp b_write_date;
 	private int b_count;
 	private String m_id;
-	private int b_password;
 	
 	private int bt_no;
-	private String is_member;
 	private String bt_name;
 	
 	private int f_no;
@@ -61,10 +57,10 @@ public class Board {
 	@Override
 	public String toString() {
 		return "Board [b_no=" + b_no + ", b_title=" + b_title + ", b_content=" + b_content + ", b_writer=" + b_writer
-				+ ", b_write_date=" + b_write_date + ", b_count=" + b_count + ", m_id=" + m_id + ", b_password="
-				+ b_password + ", bt_no=" + bt_no + ", is_member=" + is_member + ", bt_name=" + bt_name + ", f_no="
-				+ f_no + ", f_directory=" + f_directory + ", f_date=" + f_date + ", f_count=" + f_count + ", c_no="
-				+ c_no + ", c_writer=" + c_writer + ", c_write_date=" + c_write_date + ", c_comment=" + c_comment + "]";
+				+ ", b_write_date=" + b_write_date + ", b_count=" + b_count + ", m_id=" + m_id + ", bt_no=" + bt_no
+				+ ", bt_name=" + bt_name + ", f_no=" + f_no + ", f_directory=" + f_directory + ", f_date=" + f_date
+				+ ", f_count=" + f_count + ", c_no=" + c_no + ", c_writer=" + c_writer + ", c_write_date="
+				+ c_write_date + ", c_comment=" + c_comment + "]";
 	}
 
 	public Board() {
@@ -127,13 +123,6 @@ public class Board {
 		this.m_id = m_id;
 	}
 
-	public int getB_password() {
-		return b_password;
-	}
-
-	public void setB_password(int b_password) {
-		this.b_password = b_password;
-	}
 
 	public int getBt_no() {
 		return bt_no;
@@ -141,14 +130,6 @@ public class Board {
 
 	public void setBt_no(int bt_no) {
 		this.bt_no = bt_no;
-	}
-
-	public String getIs_member() {
-		return is_member;
-	}
-
-	public void setIs_member(String is_member) {
-		this.is_member = is_member;
 	}
 
 	public int getF_no() {
