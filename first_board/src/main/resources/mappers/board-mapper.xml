@@ -32,4 +32,14 @@
 	where b.b_no = #{b_no}
 </select>
 
+<delete id="deleteBoard" parameterType="_int">
+	delete from tb_board
+	where b_no = #{b_no}
+</delete>
+
+<update id="updateBoard" parameterType="Board">
+	update tb_board
+	set b_title = #{b_title}, b_content = #{b_content}
+	where b_no = #{b_no}
+</update>
 </mapper>

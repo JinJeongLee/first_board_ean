@@ -94,6 +94,60 @@ public class BoardController {
 		return mv;
 	}
 	
+	@GetMapping("/update")
+	public ModelAndView viewUpdateBoard(ModelAndView mv
+			, Board board
+			, HttpSession session
+			, RedirectAttributes rattr
+			, @RequestParam(name="b_no") int b_no
+			) {
+		if(session.getAttribute("loginSSInfo") == null) {
+			rattr.addFlashAttribute("msg", "로그인 후 이용 가능합니다.");
+			mv.setViewName("member/login"); //로그인으로
+			return mv;
+		}
+		mv.addObject("b_no", b_no);
+		mv.setViewName("board/update");
+		return mv;
+	}
+	
+	@PostMapping("/update")
+	public int updateBoard(
+			HttpSession session
+			, RedirectAttributes rattr
+			, Board board
+			, @RequestParam(name="b_no") int b_no
+			, @RequestParam(name="b_title") String b_title
+			, @RequestParam(name="b_content") String b_content
+			) {
+		
+		board.setB_no(b_no);
+		board.setB_title(b_title);
+		board.setB_content(b_content);
+		
+		int result = service.updateBoard(board);
+		/*
+		 * if(result == 1) { rattr.addFlashAttribute("msg", "게시글 수정이 완료되었습니다.");
+		 * 
+		 * } else { rattr.addFlashAttribute("msg", "게시글 수정에 실패했습니다."); }
+		 */
+		return result;
+		
+	}
+	
+	@PostMapping("/delete")
+	public int deleteBoard(
+			HttpSession session
+			, RedirectAttributes rattr
+			, @RequestParam(name="b_no") int b_no
+			) {
+		
+		int result = service.deleteBoard(b_no);
+		return result;
+		
+	}
+	
+	
 	/*
 	 * @GetMapping("/list") public ModelAndView selectNotice(ModelAndView mv,
 	 * 

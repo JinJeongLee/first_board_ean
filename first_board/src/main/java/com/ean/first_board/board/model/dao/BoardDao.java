@@ -29,4 +29,12 @@ public class BoardDao {
 		public Board selectBoard(int b_no) {
 			return sqlsession.selectOne("Board.selectBoard", b_no);
 		}
+	//글 수정
+		public int updateBoard(Board board) {
+			return sqlsession.update("Board.updateBoard", board);
+		}
+	//글 삭제
+		public int deleteBoard(int b_no) {
+			return sqlsession.update("Board.deleteBoard", b_no);
+		}
 }

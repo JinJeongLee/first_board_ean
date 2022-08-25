@@ -97,7 +97,9 @@
 
 /* grid box~! */
 #update_delete_btn{
-	text-align: right;
+	display: flex;
+	gap: 5px;
+	flex-direction: row-reverse;
 }
 
 /* 같은 폰트 적용 */
@@ -133,8 +135,14 @@
 				<div id="project_board_read_grid">
 				<div class="project_board_read_title">No. ${board.b_no }</div>
 				<div id="update_delete_btn">
-				<button class="btn_format_mini_gray">수정</button>
-				<button class="btn_format_mini_gray">삭제</button>
+				<form action="delete" method="post">
+					<input type="hidden" name="b_no" value="${board.b_no}">
+					<button class="btn_format_mini_gray">삭제</button>
+				</form>
+				<form action="update" method="get">
+					<input type="hidden" name="b_no" value="${board.b_no}">
+					<button class="btn_format_mini_gray">수정</button>
+				</form>
 				</div>
 				<div class="project_board_read_title">게시물 제목</div>
 				<div class="project_board_read_title" id="project_board_read_title">${board.b_title }</div>

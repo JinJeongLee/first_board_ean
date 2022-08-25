@@ -12,4 +12,8 @@ public interface BoardService {
 	public List<Board> selectBoardList();
 	
 	public Board selectBoard(int b_no);
+	
+	public int updateBoard(Board board);
+	
+	public int deleteBoard(int b_no);
 }
