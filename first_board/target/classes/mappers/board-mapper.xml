@@ -24,7 +24,12 @@
     <if test='selectVal != 0'>
     	where b.bt_no=#{selectVal}
 	</if>
+
     order by b_no desc
+</select>
+
+<select id="countBoard" resultType="_int">
+	select count (*) from tb_board
 </select>
 
 <select id="selectBoard" resultType="Board" parameterType="_int">

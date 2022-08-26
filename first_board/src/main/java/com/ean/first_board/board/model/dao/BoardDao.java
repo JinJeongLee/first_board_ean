@@ -23,11 +23,14 @@ public class BoardDao {
 			return sqlsession.insert("Board.insertBoard", board);
 		}
 	// 게시글 리스트
-		public List<Board> selectBoardList(){
-			return sqlsession.selectList("Board.selectBoardList");
+//		public List<Board> selectBoardList(){
+//			return sqlsession.selectList("Board.selectBoardList");
+//		}
+		public List<Board> selectBoardList(int selectVal, RowBounds rowBounds){
+			return sqlsession.selectList("Board.selectBoardList", selectVal ,rowBounds);
 		}
-		public List<Board> selectBoardList(String selectVal, RowBounds rowBounds){
-			return sqlsession.selectList("Board.selectBoardList", selectVal, rowBounds);
+		public int countBoard() {
+			return sqlsession.selectOne("Board.countBoard");
 		}
 	// 게시글 읽기
 		public Board selectBoard(int b_no) {

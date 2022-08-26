@@ -11,8 +11,9 @@ public interface BoardService {
 	
 	public int insertBoard(Board board);
 	
-	public List<Board> selectBoardList();
+//	public List<Board> selectBoardList();
 	public List<Board> selectBoardList(int selectVal, RowBounds rowBounds);
+	public int countBoard();
 	
 	public Board selectBoard(int b_no);
 	

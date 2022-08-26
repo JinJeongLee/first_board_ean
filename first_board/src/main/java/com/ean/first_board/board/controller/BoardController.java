@@ -40,7 +40,7 @@ public class BoardController {
 			return mv;
 		}
 		int currentPage = 1; // 현재 페이지
-		int cotentLimit = 15; // 한 페이지에 보여질 직원 정보 갯수
+		int contentLimit = 10; // 한 페이지에 보여질 정보 갯수
 		
 		String currentPageStr = page;
 		try {
@@ -51,17 +51,24 @@ public class BoardController {
 			e.printStackTrace();
 		}
 		
-		int offset = (currentPage - 1) * cotentLimit;
-		RowBounds rowBounds = new RowBounds(offset, cotentLimit);
+		int offset = (currentPage - 1) * contentLimit;
+		RowBounds rowBounds = new RowBounds(offset, contentLimit);
 		
-		list = service.selectBoardList();
-		
-		int totalpageCnt = list.size()/cotentLimit + 1;
+		int listsize = service.countBoard()	;
+		list = service.selectBoardList(selectVal, rowBounds);
+		if(selectVal != 0) {
+			listsize = list.size();
+		}
+		int totalpageCnt = listsize/contentLimit + 1;
 		int startPage = currentPage - (((currentPage % 5) == 0)?4:((currentPage % 5)-1)); 
 		int endPage = ((startPage + 4) > totalpageCnt)?totalpageCnt:(startPage + 4);
 		
-		list = service.selectBoardList(selectVal, rowBounds);
+		
+		mv.addObject("option", selectVal);
 		mv.addObject("boardList", list);
+		mv.addObject("totalpageCnt", totalpageCnt);
+		mv.addObject("startPage", startPage);
+		mv.addObject("endPage", endPage);
 		mv.setViewName("board/main");
 		return mv;
 	}

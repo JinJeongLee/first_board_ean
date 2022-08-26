@@ -11,7 +11,11 @@
 <meta charset="UTF-8">
 <title>Board</title>
 <%@ include file="/WEB-INF/views/template/font.jsp" %>
-
+<script>
+<c:if test="${not empty msg}">
+	alert("${msg}");
+</c:if>
+</script>
 <style type="text/css">
 .board_main_box_first_container {
 	flex-grow: 1;
@@ -141,14 +145,14 @@
 					<div id="pageing_all">
 		                <div class="pageing">
 		                	<p id="p_c">
-		                		<c:if test="${not empty employeeList}">
+		                		<c:if test="${not empty boardList}">
 									<c:if test="${startPage > 1 }">
 										<a class="page page_prev">이전</a>
 									</c:if>
 									<c:forEach begin="${startPage }" end="${endPage }" var="p">
 										<a class="page page_num" >${p}</a>
 									</c:forEach>
-									<c:if test="${endPage < totalpageCnt}">
+									<c:if test="${endPage ne totalpageCnt}">
 										<a class="page page_post" >다음</a>
 									</c:if>
 								</c:if>
@@ -195,8 +199,47 @@ $(".tb_read").on("click", function(){
 	location.href = "<%= request.getContextPath()%>/read?b_no="+b_no;
 })
 
-// 핉터 정렬 ajax
+// 핉터 정렬 
+	$("#board_type").on('change', function() {
+		var option = $('#board_type').val();
+		location.href="<%= request.getContextPath() %>/?page=1&option="+option;
+	});
+	var urlOption = '${option}';
+	if(urlOption == '0') {
+		$('#board_type').val('0').prop('selected', true);
+	} else if(urlOption == '1') {
+		$('#board_type').val('1').prop('selected', true);
+	} else if(urlOption == '2'){
+		$('#board_type').val('2').prop('selected', true);
+	}else if(urlOption == '3'){
+		$('#board_type').val('3').prop('selected', true);
+	}else if(urlOption == '4'){
+		$('#board_type').val('4').prop('selected', true);
+	}
 
+// 페이지 번호
+var js_page_no = (new URL(location.href).searchParams).get('page');
+// 페이지처리
+$(".page").on('click', function() {
+		var option = $("#board_type").val();
+		if($(this).hasClass('page_prev')) {
+			location.href="<%= request.getContextPath() %>/?page=${startPage-1}&option="+option;
+		} else if($(this).hasClass('page_num')) {
+			location.href="<%= request.getContextPath() %>/?page="+$(this).text()+"&option="+option;
+		} else if($(this).hasClass('page_post')) {
+			location.href="<%= request.getContextPath() %>/?page=${endPage+1}&option="+option;
+		}
+	});
+
+for(var i = 0; i < $(".page_num").length; i++) {
+	if($(".page_num").eq(i).text() == js_page_no) {
+		$(".page_num").eq(i).css({
+			"background-color" : "#4B4DB2",
+			color : "white"
+		});
+		break;
+	}
+}
 
 ////////날짜 유효성 ///////////
 //start input -> end min
