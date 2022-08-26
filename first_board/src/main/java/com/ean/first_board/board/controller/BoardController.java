@@ -4,6 +4,7 @@ import java.util.List;
 
 import javax.servlet.http.HttpSession;
 
+import org.apache.ibatis.session.RowBounds;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -28,6 +29,8 @@ public class BoardController {
 	@GetMapping("/")
 	public ModelAndView viewBoard(ModelAndView mv
 			, @RequestParam(name="list", required = false) List<Board> list
+			, @RequestParam(name="page", required = false) String page
+			, @RequestParam(name="option", required = false, defaultValue = "0") int selectVal
 			, HttpSession session
 			, RedirectAttributes rattr
 			) {
@@ -36,7 +39,28 @@ public class BoardController {
 			mv.setViewName("member/login"); //로그인으로
 			return mv;
 		}
+		int currentPage = 1; // 현재 페이지
+		int cotentLimit = 15; // 한 페이지에 보여질 직원 정보 갯수
+		
+		String currentPageStr = page;
+		try {
+			if(currentPageStr != null && !currentPageStr.equals("")) {
+				currentPage = Integer.parseInt(currentPageStr);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		int offset = (currentPage - 1) * cotentLimit;
+		RowBounds rowBounds = new RowBounds(offset, cotentLimit);
+		
 		list = service.selectBoardList();
+		
+		int totalpageCnt = list.size()/cotentLimit + 1;
+		int startPage = currentPage - (((currentPage % 5) == 0)?4:((currentPage % 5)-1)); 
+		int endPage = ((startPage + 4) > totalpageCnt)?totalpageCnt:(startPage + 4);
+		
+		list = service.selectBoardList(selectVal, rowBounds);
 		mv.addObject("boardList", list);
 		mv.setViewName("board/main");
 		return mv;
@@ -112,8 +136,9 @@ public class BoardController {
 	}
 	
 	@PostMapping("/update")
-	public int updateBoard(
+	public ModelAndView updateBoard(
 			HttpSession session
+			, ModelAndView mv
 			, RedirectAttributes rattr
 			, Board board
 			, @RequestParam(name="b_no") int b_no
@@ -126,24 +151,40 @@ public class BoardController {
 		board.setB_content(b_content);
 		
 		int result = service.updateBoard(board);
+		if(result == 1) {
+			rattr.addFlashAttribute("msg", "글 수정에 성공했습니다.");
+			mv.setViewName("redirect:/");
+		} else { 
+			rattr.addFlashAttribute("msg", "게시글 수정에 실패했습니다. 게시판으로 돌아갑니다.");
+			mv.setViewName("redirect:/");
+		}
 		/*
 		 * if(result == 1) { rattr.addFlashAttribute("msg", "게시글 수정이 완료되었습니다.");
 		 * 
 		 * } else { rattr.addFlashAttribute("msg", "게시글 수정에 실패했습니다."); }
 		 */
-		return result;
+		return mv;
+		
 		
 	}
 	
 	@PostMapping("/delete")
-	public int deleteBoard(
+	public ModelAndView deleteBoard(
 			HttpSession session
+			, ModelAndView mv
 			, RedirectAttributes rattr
 			, @RequestParam(name="b_no") int b_no
 			) {
 		
 		int result = service.deleteBoard(b_no);
-		return result;
+		if(result == 1) {
+			rattr.addFlashAttribute("msg", "글 삭제를 성공했습니다.");
+			mv.setViewName("redirect:/");
+		} else { 
+			rattr.addFlashAttribute("msg", "게시글 삭제를 실패했습니다. 게시판으로 돌아갑니다.");
+			mv.setViewName("redirect:/");
+		}
+		return mv;
 		
 	}
 	

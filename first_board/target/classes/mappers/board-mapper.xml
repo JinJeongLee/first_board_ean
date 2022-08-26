@@ -16,11 +16,14 @@
 	)
 </insert>
 
-<select id="selectBoardList" resultType="Board">
+<select id="selectBoardList" resultType="Board" parameterType="_int">
 	select b.*, t.bt_name 
 	from tb_board b
 	left outer join tb_board_type t 
     on b.bt_no = t.bt_no
+    <if test='selectVal != 0'>
+    	where b.bt_no=#{selectVal}
+	</if>
     order by b_no desc
 </select>
 

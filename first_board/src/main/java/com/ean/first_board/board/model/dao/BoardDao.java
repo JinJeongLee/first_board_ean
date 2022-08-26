@@ -3,6 +3,7 @@ package com.ean.first_board.board.model.dao;
 
 import java.util.List;
 
+import org.apache.ibatis.session.RowBounds;
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
@@ -24,6 +25,9 @@ public class BoardDao {
 	// 게시글 리스트
 		public List<Board> selectBoardList(){
 			return sqlsession.selectList("Board.selectBoardList");
+		}
+		public List<Board> selectBoardList(String selectVal, RowBounds rowBounds){
+			return sqlsession.selectList("Board.selectBoardList", selectVal, rowBounds);
 		}
 	// 게시글 읽기
 		public Board selectBoard(int b_no) {

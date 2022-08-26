@@ -2,6 +2,7 @@ package com.ean.first_board.board.model.service;
 
 import java.util.List;
 
+import org.apache.ibatis.session.RowBounds;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -21,6 +22,11 @@ public class BoardServiceImpl implements BoardService {
 
 	@Override
 	public List<Board> selectBoardList() {
+		return dao.selectBoardList();
+	}
+	
+	@Override
+	public List<Board> selectBoardList(int selectVal, RowBounds rowBounds) {
 		return dao.selectBoardList();
 	}
 

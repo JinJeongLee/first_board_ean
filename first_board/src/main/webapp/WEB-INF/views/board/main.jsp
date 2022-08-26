@@ -48,9 +48,27 @@
 	text-align: right;
 }
 
+#search_box_button{
+	margin-top: 30px;
+}
+#search_box_button_container{
+	text-align: right;
+}
+#search_box{
+	border: 1px solid rgb(224, 224, 224);
+    width: 180px;
+    height: 25px;
+    font-size: 12px;
+    font-family: NotoSansR;
+    color: rgb(94, 94, 94);
+}
 
 /* grid box~! */
 
+#select_write_box{
+	display: flex;
+	gap: 850px;
+}
 
 
 /* 같은 폰트 적용 */
@@ -84,8 +102,17 @@
 		<div id="board_main_container">
 			<div class="board_hr_main_box">
 				<div class="board_main_box_content">
-					<div id="write_board">
-						<button type="button" class="btn_format_mini" id="write_btn">글쓰기</button>
+					<div id="select_write_box">
+						<select name="board_type" id="board_type">
+				        	<option value="0">전체</option>
+				        	<option value="1">자유</option>
+				        	<option value="2">공지</option>
+				        	<option value="3">유머</option>
+				        	<option value="4">뉴스</option>
+				        </select>
+						<div id="write_board">
+							<button type="button" class="btn_format_mini" id="write_btn">글쓰기</button>
+						</div>
 					</div>
 				</div>
 				<div class="board_main_box_content">
@@ -111,7 +138,31 @@
 							</tr>
 						</c:forEach>
 					</table>
+					<div id="pageing_all">
+		                <div class="pageing">
+		                	<p id="p_c">
+		                		<c:if test="${not empty employeeList}">
+									<c:if test="${startPage > 1 }">
+										<a class="page page_prev">이전</a>
+									</c:if>
+									<c:forEach begin="${startPage }" end="${endPage }" var="p">
+										<a class="page page_num" >${p}</a>
+									</c:forEach>
+									<c:if test="${endPage < totalpageCnt}">
+										<a class="page page_post" >다음</a>
+									</c:if>
+								</c:if>
+							</p>
+		                </div>
+		            </div>
 				</div>
+				<div class="board_main_box_content" id="search_box_button_container">
+					<div id="search_box_button">
+						<input id="search_box" type="text" placeholder="제목, 내용, 작성자 검색">
+						<button type="button" class="btn_format_mini_gray">검색</button>
+					</div>
+				</div>
+				
 			</div>
 			
 		</div>
@@ -143,6 +194,10 @@ $(".tb_read").on("click", function(){
 	var b_no = $(this).siblings().first().text() ;
 	location.href = "<%= request.getContextPath()%>/read?b_no="+b_no;
 })
+
+// 핉터 정렬 ajax
+
+
 ////////날짜 유효성 ///////////
 //start input -> end min
 $("#att_date_start").on("input", function() {
