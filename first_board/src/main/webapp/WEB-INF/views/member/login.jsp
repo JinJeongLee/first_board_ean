@@ -11,11 +11,7 @@
 <meta charset="UTF-8">
 <title>로그인</title>
 <%@ include file="/WEB-INF/views/template/font.jsp" %>
-<script>
-<c:if test="${not empty msg}">
-alert("${msg}");
-</c:if>
-</script>
+
 </head>
 <script>
 $(function(){
@@ -98,6 +94,9 @@ $(function(){
  }
 </script>
 <body>
+<c:if test="${not empty msg}">
+	alert("${msg}");
+</c:if>
 <%@ include file="/WEB-INF/views/template/aside.jsp" %>
 <section>
 	<div id="section">

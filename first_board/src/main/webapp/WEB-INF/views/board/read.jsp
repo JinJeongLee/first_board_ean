@@ -9,6 +9,7 @@
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="https://kit.fontawesome.com/d61a9a42f0.js"></script>
 <script src="https://cdn.ckeditor.com/4.18.0/standard/ckeditor.js"></script>
+
 <meta charset="UTF-8">
 <title>Board</title>
 <%@ include file="/WEB-INF/views/template/font.jsp" %>
@@ -123,6 +124,9 @@
 </style>
 </head>
 <body>
+<c:if test="${not empty msg}">
+	alert("${msg}");
+</c:if>
 <%@ include file="/WEB-INF/views/template/aside.jsp" %>
 <section id="board_section">
 	<div id="board_main_wrap">

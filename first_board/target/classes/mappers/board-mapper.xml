@@ -23,6 +23,16 @@
     on b.bt_no = t.bt_no
     <if test='selectVal != 0'>
     	where b.bt_no=#{selectVal}
+    	<if test='searchVal != null and searchOpt.equals("title")'>
+    		and where b_title like #{searchVal}
+    	</if>
+    	<if test='searchVal != null and searchOpt.equals("content")'>
+    		and where b_content like #{searchVal}
+    	</if>
+    	<if test='searchVal != null and searchOpt.equals("writer")'>
+    		and where b_writer like #{searchVal}
+    	</if>
+    	
 	</if>
 
     order by b_no desc

@@ -34,11 +34,13 @@ public class BoardController {
 			, HttpSession session
 			, RedirectAttributes rattr
 			) {
-		if(session.getAttribute("loginSSInfo") == null) {
-			rattr.addFlashAttribute("msg", "로그인 후 이용 가능합니다.");
-			mv.setViewName("member/login"); //로그인으로
-			return mv;
-		}
+				
+		 if(session.getAttribute("loginSSInfo") == null) {
+		 rattr.addFlashAttribute("msg", "로그인 후 이용 가능합니다.");
+		 mv.setViewName("member/login"); //로그인으로 
+		 return mv; 
+		 }
+				 
 		int currentPage = 1; // 현재 페이지
 		int contentLimit = 10; // 한 페이지에 보여질 정보 갯수
 		

@@ -11,11 +11,6 @@
 <meta charset="UTF-8">
 <title>Board</title>
 <%@ include file="/WEB-INF/views/template/font.jsp" %>
-<script>
-<c:if test="${not empty msg}">
-	alert("${msg}");
-</c:if>
-</script>
 <style type="text/css">
 .board_main_box_first_container {
 	flex-grow: 1;
@@ -66,6 +61,9 @@
     font-family: NotoSansR;
     color: rgb(94, 94, 94);
 }
+#search_select{
+	width: 60px;
+	}
 
 /* grid box~! */
 
@@ -96,6 +94,9 @@
 </style>
 </head>
 <body>
+<c:if test="${not empty msg}">
+	alert("${msg}");
+</c:if>
 <%@ include file="/WEB-INF/views/template/aside.jsp" %>
 <section id="board_section">
 	<div id="board_main_wrap">
@@ -162,7 +163,12 @@
 				</div>
 				<div class="board_main_box_content" id="search_box_button_container">
 					<div id="search_box_button">
-						<input id="search_box" type="text" placeholder="제목, 내용, 작성자 검색">
+						<select id="search_select">
+							<option value="title">제목</option>
+							<option value="content">내용</option>
+							<option value="writer">작성자</option>
+						</select>
+						<input id="search_box" type="text" placeholder="검색어를 입력해주세요.">
 						<button type="button" class="btn_format_mini_gray">검색</button>
 					</div>
 				</div>
@@ -241,16 +247,6 @@ for(var i = 0; i < $(".page_num").length; i++) {
 	}
 }
 
-////////날짜 유효성 ///////////
-//start input -> end min
-$("#att_date_start").on("input", function() {
-	$("#att_date_end").attr("min", $("#att_date_start").val());
-});
-
-// end input -> start max
-$("#att_date_end").on("input", function() {
-	$("#att_date_start").attr("max", $("#att_date_end").val());
-});
 </script>
 </body>
 </html>
