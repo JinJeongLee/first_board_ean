@@ -75,6 +75,61 @@ public class BoardController {
 		return mv;
 	}
 	
+	@PostMapping("/")
+	public ModelAndView viewSearchBoard(ModelAndView mv
+			, @RequestParam(name="list", required = false) List<Board> list
+			, @RequestParam(name="page", required = false) String page
+			, @RequestParam(name="option", required = false, defaultValue = "0") int selectVal
+			, @RequestParam(name="searchOpt", required = false, defaultValue = "title") String searchOpt
+			, @RequestParam(name="searchVal", required = false) String searchVal
+			, HttpSession session
+			, RedirectAttributes rattr
+			
+			) {
+		if(session.getAttribute("loginSSInfo") == null) {
+			 rattr.addFlashAttribute("msg", "로그인 후 이용 가능합니다.");
+			 mv.setViewName("member/login"); //로그인으로 
+			 return mv; 
+		 }
+		
+		int currentPage = 1; // 현재 페이지
+		int contentLimit = 10; // 한 페이지에 보여질 정보 갯수
+		
+		String currentPageStr = page;
+		try {
+			if(currentPageStr != null && !currentPageStr.equals("")) {
+				currentPage = Integer.parseInt(currentPageStr);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		int offset = (currentPage - 1) * contentLimit;
+		RowBounds rowBounds = new RowBounds(offset, contentLimit);
+		
+		list = service.selectBoardList(searchVal, searchOpt, selectVal, rowBounds);
+		int listsize = list.size()	;
+//		if(selectVal != 0) {
+//			listsize = list.size();
+//		}
+		int totalpageCnt = listsize/contentLimit + 1;
+		int startPage = currentPage - (((currentPage % 5) == 0)?4:((currentPage % 5)-1)); 
+		int endPage = ((startPage + 4) > totalpageCnt)?totalpageCnt:(startPage + 4);
+		
+		
+		mv.addObject("option", selectVal);
+		mv.addObject("searchOpt", searchOpt);
+		mv.addObject("searchVal", searchVal);
+		mv.addObject("boardList", list);
+		mv.addObject("totalpageCnt", totalpageCnt);
+		mv.addObject("startPage", startPage);
+		mv.addObject("endPage", endPage);
+		mv.setViewName("board/main");
+		
+		return mv;
+	}
+	
+	
 	@RequestMapping("/insert")
 	public ModelAndView viewInsertBoard(ModelAndView mv
 			, Board board
@@ -118,7 +173,7 @@ public class BoardController {
 			) {
 		if(session.getAttribute("loginSSInfo") == null) {
 			rattr.addFlashAttribute("msg", "로그인 후 이용 가능합니다.");
-			mv.setViewName("member/login"); //로그인으로
+			mv.setViewName("redirect:member/login"); //로그인으로
 			return mv;
 		}
 		board.setB_no(b_no);

@@ -122,11 +122,13 @@
 }
 
 </style>
-</head>
-<body>
+<script>
 <c:if test="${not empty msg}">
 	alert("${msg}");
 </c:if>
+</script>
+</head>
+<body>
 <%@ include file="/WEB-INF/views/template/aside.jsp" %>
 <section id="board_section">
 	<div id="board_main_wrap">
@@ -138,16 +140,16 @@
 			<div id="project_board_read_wrap">
 				<div id="project_board_read_grid">
 				<div class="project_board_read_title">No. ${board.b_no }</div>
-				<div id="update_delete_btn">
-				<form action="delete" method="post">
-					<input type="hidden" name="b_no" value="${board.b_no}">
-					<button class="btn_format_mini_gray">삭제</button>
-				</form>
-				<form action="update" method="get">
-					<input type="hidden" name="b_no" value="${board.b_no}">
-					<button class="btn_format_mini_gray">수정</button>
-				</form>
-				</div>
+					<div id="update_delete_btn">
+					<form action="delete" method="post">
+						<input type="hidden" name="b_no" value="${board.b_no}">
+						<button class="btn_format_mini_gray btn_d_u">삭제</button>
+					</form>
+					<form action="update" method="get">
+						<input type="hidden" name="b_no" value="${board.b_no}">
+						<button class="btn_format_mini_gray btn_d_u">수정</button>
+					</form>
+					</div>
 				<div class="project_board_read_title">게시물 제목</div>
 				<div class="project_board_read_title" id="project_board_read_title">${board.b_title }</div>
 				<div class="project_board_read_title">게시물 내용</div>
@@ -216,6 +218,12 @@
 	</div>
 </section>
 <script>
+	$(function(){
+	  if(${loginSSInfo.m_nickname ne board.b_writer }){
+		  $(".btn_d_u").hide();
+	  }
+	});
+	
 	$("#board_cancel").on("click", function(){
 		location.href="<%= request.getContextPath()%>/";
 	})

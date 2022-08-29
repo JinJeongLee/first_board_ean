@@ -92,11 +92,14 @@
 }
 
 </style>
-</head>
-<body>
+<script>
 <c:if test="${not empty msg}">
 	alert("${msg}");
 </c:if>
+</script>
+</head>
+<body>
+
 <%@ include file="/WEB-INF/views/template/aside.jsp" %>
 <section id="board_section">
 	<div id="board_main_wrap">
@@ -163,13 +166,15 @@
 				</div>
 				<div class="board_main_box_content" id="search_box_button_container">
 					<div id="search_box_button">
-						<select id="search_select">
-							<option value="title">제목</option>
-							<option value="content">내용</option>
-							<option value="writer">작성자</option>
-						</select>
-						<input id="search_box" type="text" placeholder="검색어를 입력해주세요.">
-						<button type="button" class="btn_format_mini_gray">검색</button>
+						<form action="" method="post">
+							<select id="search_select" name="searchOpt">
+								<option value="title">제목</option>
+								<option value="content">내용</option>
+								<option value="writer">작성자</option>
+							</select>
+							<input id="search_box" name="searchVal" type="text" placeholder="검색어를 입력해주세요.">
+							<button type="submit" class="btn_format_mini_gray">검색</button>
+						</form>
 					</div>
 				</div>
 				

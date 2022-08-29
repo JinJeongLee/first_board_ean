@@ -14,17 +14,6 @@
 		<c:if test="${not empty loginSSInfo }">
 			<button class="btn_format_mini logout_btn" id="logout_btn">로그아웃</button>
 		</c:if>
-		<!-- <div id="test_login_btn_wrap">
-			<button class="btn_format_mini test_login_btn">테스트 로그인</button>
-			<button class="btn_format_mini test_login_btn">테스트 로그인</button>
-			<button class="btn_format_mini test_login_btn">테스트 로그인</button>
-			<button class="btn_format_mini test_login_btn">테스트 로그인</button>
-			<button class="btn_format_mini test_login_btn">테스트 로그인</button>
-			<button class="btn_format_mini test_login_btn">테스트 로그인</button>
-			<button class="btn_format_mini test_login_btn">서유빈</button>
-			<button class="btn_format_mini test_login_btn">이진정</button>
-			<button class="btn_format_mini test_login_btn">민승택</button>
-		</div> -->
 		<form action="<%= request.getContextPath()%>/login.do" method="post" class="test_login_form">
 			<input type="hidden" name="email" value="emp1@email.com">
 			<input type="hidden" name="pwd" value="1234">
@@ -46,6 +35,11 @@
 				<div class="left_menu_wrap_1depth">
 					<div class="left_menu_1depth_title" open_chk="f" id="login_side">
 								로그인
+					</div>
+				</div>
+				<div class="left_menu_wrap_1depth">
+					<div class="left_menu_1depth_title" open_chk="f" id="join_side">
+								회원가입
 					</div>
 				</div>
 			</div>
@@ -117,6 +111,9 @@
 	});
 	$('#login_side').click(function() {
 		location.href = '<%= request.getContextPath()%>/login';
+	});
+	$('#join_side').click(function() {
+		location.href = '<%= request.getContextPath()%>/join';
 	});
 	
 </script>

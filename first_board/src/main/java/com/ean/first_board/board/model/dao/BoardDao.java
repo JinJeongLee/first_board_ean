@@ -1,6 +1,7 @@
 package com.ean.first_board.board.model.dao;
 
 
+import java.util.HashMap;
 import java.util.List;
 
 import org.apache.ibatis.session.RowBounds;
@@ -23,11 +24,17 @@ public class BoardDao {
 			return sqlsession.insert("Board.insertBoard", board);
 		}
 	// 게시글 리스트
-//		public List<Board> selectBoardList(){
-//			return sqlsession.selectList("Board.selectBoardList");
-//		}
+		public List<Board> selectBoardList(String searchVal, String searchOpt, int selectVal, RowBounds rowBounds){
+			HashMap<String, Object> map= new HashMap<>();
+			map.put("searchVal", searchVal);
+			map.put("searchOpt", searchOpt);
+			map.put("selectVal", selectVal);
+			return sqlsession.selectList("Board.selectBoardList", map ,rowBounds);
+		}
 		public List<Board> selectBoardList(int selectVal, RowBounds rowBounds){
-			return sqlsession.selectList("Board.selectBoardList", selectVal ,rowBounds);
+			HashMap<String, Object> map= new HashMap<>();
+			map.put("selectVal", selectVal);
+			return sqlsession.selectList("Board.selectBoardList", map ,rowBounds);
 		}
 		public int countBoard() {
 			return sqlsession.selectOne("Board.countBoard");

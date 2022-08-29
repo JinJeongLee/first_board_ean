@@ -20,5 +20,18 @@ public class MemberServiceImpl implements MemberService {
 		return dao.selectMember(member);
 	}
 	
+	//회원가입
+	public int insertMember(Member member) {
+		return dao.insertMember(member);
+	}
 	
+	//중복체크
+	@Override
+	public int checkNickname(String m_nickname) {
+		return dao.checkNickname(m_nickname);
+	}
+	@Override
+	public int checkId(String m_id) {
+		return dao.checkId(m_id);
+	}
 }

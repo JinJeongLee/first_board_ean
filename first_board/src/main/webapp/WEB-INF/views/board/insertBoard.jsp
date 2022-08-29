@@ -119,6 +119,11 @@
 }
 
 </style>
+<script>
+<c:if test="${not empty msg}">
+	alert("${msg}");
+</c:if>
+</script>
 </head>
 <body>
 <%@ include file="/WEB-INF/views/template/aside.jsp" %>
@@ -182,16 +187,21 @@
 			alert("모두 작성해 주세요") ;
 			return;
 		}
+		var file = $('#attachFile')[0].files[0];
+		var fileData = new FormData();
+		
+		formData.append('files', form);
 		$.ajax({
 			url: "<%=request.getContextPath()%>/insert",
 			type: "post",
+			enctype: 'multipart/form-data',
 			data: {b_title : $('#board_title').val()
 				, b_content : $('#board_content1').val()
 				, bt_no : $('#board_type').val()
 				, b_writer : "${loginSSInfo.m_nickname}"
 				, m_id : "${loginSSInfo.m_id}"
 				} ,
-			dataType:"json",
+	/* 		dataType:"json", */
 			success: function(result){
 				console.log(result);
 				alert("글 등록을 완료했습니다."); 

@@ -20,13 +20,13 @@ public class BoardServiceImpl implements BoardService {
 		return dao.insertBoard(board);
 	}
 
-//	@Override
-//	public List<Board> selectBoardList() {
-//		return dao.selectBoardList();
-//	}
 	@Override
 	public List<Board> selectBoardList(int selectVal, RowBounds rowBounds) {
 		return dao.selectBoardList(selectVal, rowBounds);
+	}
+	@Override
+	public List<Board> selectBoardList(String searchVal, String searchOpt, int selectVal, RowBounds rowBounds) {
+		return dao.selectBoardList(searchVal, searchOpt, selectVal, rowBounds);
 	}
 	@Override
 	public int countBoard() {
