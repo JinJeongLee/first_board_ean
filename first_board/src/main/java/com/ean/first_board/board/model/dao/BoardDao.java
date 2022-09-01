@@ -43,12 +43,42 @@ public class BoardDao {
 		public Board selectBoard(int b_no) {
 			return sqlsession.selectOne("Board.selectBoard", b_no);
 		}
+		public List<Board> selectFile(int b_no) {
+			return sqlsession.selectList("Board.selectFile", b_no);
+		}
+		
 	//글 수정
 		public int updateBoard(Board board) {
 			return sqlsession.update("Board.updateBoard", board);
 		}
 	//글 삭제
 		public int deleteBoard(int b_no) {
-			return sqlsession.update("Board.deleteBoard", b_no);
+			return sqlsession.delete("Board.deleteBoard", b_no);
+		}
+		
+	//조회수
+		public int updateCount(int b_no) {
+			return sqlsession.update("Board.updateCount", b_no);
+		}
+		
+//댓글
+	//댓글쓰기
+		public int insertComment(Board board) {
+			return sqlsession.insert("Board.insertComment", board);
+		}
+		public int updateCommentSeq(Board board) {
+			return sqlsession.update("Board.updateCommentSeq", board);
+		}
+		
+	//댓글리스트
+		public List<Board> selectCommentList(int b_no) {
+			return sqlsession.selectList("Board.selectCommentList", b_no);
+		}
+	//댓글 수정삭제
+		public int deleteComment(int c_no) {
+			return sqlsession.delete("Board.deleteComment", c_no);
+		}
+		public int updateComment(Board board) {
+			return sqlsession.update("Board.updateComment", board);
 		}
 }

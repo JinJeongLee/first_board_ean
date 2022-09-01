@@ -2,6 +2,8 @@ package com.ean.first_board.board.domain;
 
 import java.sql.Date;
 import java.sql.Timestamp;
+import java.util.List;
+import java.util.Map;
 
 import org.springframework.stereotype.Component;
 
@@ -45,22 +47,31 @@ public class Board {
 	private String bt_name;
 	
 	private int f_no;
-	private String f_directory;
+	private String f_original_filename;
+	private String f_rename_filename;
 	private Date f_date;
 	private int f_count;
+	
+	private List<Map<String, String>> file_list;
 	
 	private int c_no;
 	private String c_writer;
 	private Timestamp c_write_date;
 	private String c_comment;
+	public int refnum;    //참조댓글번호
+	public int c_level;  //댓글순위
+	public int c_ref;
+	public int c_seq;  //댓글 순서
 	
 	@Override
 	public String toString() {
 		return "Board [b_no=" + b_no + ", b_title=" + b_title + ", b_content=" + b_content + ", b_writer=" + b_writer
 				+ ", b_write_date=" + b_write_date + ", b_count=" + b_count + ", m_id=" + m_id + ", bt_no=" + bt_no
-				+ ", bt_name=" + bt_name + ", f_no=" + f_no + ", f_directory=" + f_directory + ", f_date=" + f_date
-				+ ", f_count=" + f_count + ", c_no=" + c_no + ", c_writer=" + c_writer + ", c_write_date="
-				+ c_write_date + ", c_comment=" + c_comment + "]";
+				+ ", bt_name=" + bt_name + ", f_no=" + f_no + ", f_original_filename=" + f_original_filename
+				+ ", f_rename_filename=" + f_rename_filename + ", f_date=" + f_date + ", f_count=" + f_count
+				+ ", file_list=" + file_list + ", c_no=" + c_no + ", c_writer=" + c_writer + ", c_write_date="
+				+ c_write_date + ", c_comment=" + c_comment + ", refnum=" + refnum + ", c_level=" + c_level + ", c_ref="
+				+ c_ref + ", c_seq=" + c_seq + "]";
 	}
 
 	public Board() {
@@ -140,14 +151,6 @@ public class Board {
 		this.f_no = f_no;
 	}
 
-	public String getF_directory() {
-		return f_directory;
-	}
-
-	public void setF_directory(String f_directory) {
-		this.f_directory = f_directory;
-	}
-
 	public Date getF_date() {
 		return f_date;
 	}
@@ -202,6 +205,62 @@ public class Board {
 
 	public void setBt_name(String bt_name) {
 		this.bt_name = bt_name;
+	}
+
+	public String getF_original_filename() {
+		return f_original_filename;
+	}
+
+	public void setF_original_filename(String f_original_filename) {
+		this.f_original_filename = f_original_filename;
+	}
+
+	public String getF_rename_filename() {
+		return f_rename_filename;
+	}
+
+	public void setF_rename_filename(String f_rename_filename) {
+		this.f_rename_filename = f_rename_filename;
+	}
+
+	public List<Map<String, String>> getFile_list() {
+		return file_list;
+	}
+
+	public void setFile_list(List<Map<String, String>> file_list) {
+		this.file_list = file_list;
+	}
+
+	public int getRefnum() {
+		return refnum;
+	}
+
+	public void setRefnum(int refnum) {
+		this.refnum = refnum;
+	}
+
+	public int getC_level() {
+		return c_level;
+	}
+
+	public void setC_level(int c_level) {
+		this.c_level = c_level;
+	}
+
+	public int getC_ref() {
+		return c_ref;
+	}
+
+	public void setC_ref(int c_ref) {
+		this.c_ref = c_ref;
+	}
+
+	public int getC_seq() {
+		return c_seq;
+	}
+
+	public void setC_seq(int c_seq) {
+		this.c_seq = c_seq;
 	}
 	
 	

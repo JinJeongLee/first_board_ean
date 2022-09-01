@@ -133,6 +133,12 @@ hr{
 	left: 150px;
 	top: 150px;
 }
+.tb_read{
+	cursor: pointer;
+}
+.tb_read:hover{
+	text-decoration: underline;
+}
 
 /* 메인페이지 */
 /* 메인페이지 */
@@ -459,13 +465,13 @@ hr{
 	display: flex;
 }
 
-.project_board_read_comemnt_content_flex {
+.project_board_read_comment_content_flex {
 	display: flex;
 	flex-direction: column;
 	gap: 20px;
 }
 
-.project_board_read_comemnt_title {
+.project_board_read_comment_title {
 	font-size: 13px;
 	font-family: NotoSansB;
 	color: rgb(94, 94, 94);
@@ -473,20 +479,20 @@ hr{
 	height: 30px;
 }
 
-.project_board_read_comemnt_content_wrap {
+.project_board_read_comment_content_wrap {
 	display: flex;
 	flex-direction: column;
-	gap: 15px;
+	gap: 5px;
 }
 
-/* .project_board_read_comemnt_content_wrap {
+/* .project_board_read_comment_content_wrap {
 	display: grid;
 	width: 620px;
 	grid-template-rows: 40px 60px;
 	row-gap: 15px;
 } */
 
-.project_board_read_comemnt_content_profile_wrap {
+.project_board_read_comment_content_profile_wrap {
 	display: grid;
 	grid-template-columns: 40px 105px 510px 30px 30px;
 	column-gap: 5px;
@@ -496,20 +502,20 @@ hr{
 	display: flex;
 }
 
-.project_board_read_comemnt_content_profile_img {
+.project_board_read_comment_content_profile_img {
 	width: 40px;
 	height: 40px;
 	border-radius: 50%;
 	background-color: rgb(230, 230, 230);
 }
 
-.project_board_read_comemnt_content_profile_img img {
+.project_board_read_comment_content_profile_img img {
 	width: 40px;
 	height: 40px;
 	border-radius: 50%;	
 }
 
-.project_board_read_comemnt_content_profile_name {
+.project_board_read_comment_content_profile_name {
 	font-size: 13px;
 	font-family: NotoSansB;
 	color: rgb(94, 94, 94);
@@ -517,7 +523,7 @@ hr{
 	line-height: 40px;
 }
 
-.project_board_read_comemnt_content_profile_job {
+.project_board_read_comment_content_profile_job {
 	font-size: 13px;
 	font-family: NotoSansR;
 	color: rgb(94, 94, 94);
@@ -526,21 +532,23 @@ hr{
 	margin-left: 10px;
 }
 
-.project_board_read_comemnt_content_date {
+.project_board_read_comment_content_date {
 	font-size: 13px;
 	font-family: NotoSansR;
 	color: rgb(94, 94, 94);
 	justify-self: end;
 	line-height: 40px;
+	margin-right: 25px;
 }
 
-.project_board_read_comemnt_content_input_wrap {
+.project_board_read_comment_content_input_wrap {
 	display: grid;
 	grid-template-columns: 640px 90px;
 	column-gap: 5px;
 }
 
-.project_board_read_comemnt_content_input {
+
+.project_board_read_comment_content_input {
 	width: 640px;
 	height: 60px;
 	font-size: 13px;
@@ -548,9 +556,10 @@ hr{
 	color: rgb(94, 94, 94);
 	resize: none;
 	overflow: hidden;
+	border: 1px solid rgb(224, 224, 224);
 }
 
-.project_board_read_comemnt_content_delete_btn {
+.project_board_read_comment_content_delete_btn {
 	/* width: 90px;
 	height: 30px; */
 	font-size: 12px;
@@ -562,7 +571,18 @@ hr{
 	align-self: center;
 }
 
-.project_board_read_comemnt_content_update_btn {
+.project_board_read_comment_content_update_btn {
+	/* width: 90px;
+	height: 30px; */
+	font-size: 12px;
+	font-family: NotoSansR;
+	color: rgb(94, 94, 94);
+	background-color: rgb(244, 244, 244);
+	cursor: pointer;
+	justify-self: end;
+    align-self: center;
+}
+.project_board_read_comment_content_reply_btn {
 	/* width: 90px;
 	height: 30px; */
 	font-size: 12px;
@@ -574,22 +594,37 @@ hr{
     align-self: center;
 }
 
-.project_board_read_comemnt_content_input_btn {
-	width: 90px;
-	height: 30px;
-	font-size: 12px;
-	font-family: NotoSansR;
-	color: rgb(94, 94, 94);
-	background-color: rgb(224, 224, 224);
-	cursor: pointer;
+#project_board_read_comment_content_input_btn {
+	width: 75px;
+	height: 25px;
+	margin-left: 15px;
+	font-size: 11px;
 }
 
-.project_board_read_comemnt_content {
+.project_board_read_comment_content {
 	width: 510px;
 	font-size: 13px;
 	font-family: NotoSansR;
 	color: rgb(94, 94, 94);
-	margin-left: 45px;
+	margin-left: 46px;
+}
+.project_board_read_reply_comment_content {
+	
+	width: 510px;
+	font-size: 13px;
+	font-family: NotoSansR;
+	color: rgb(94, 94, 94);
+	margin-left: 1px;
+}
+.project_board_read_comemnt_content_input{
+	font-size: 13px;
+	font-family: NotoSansR;
+	color: rgb(94, 94, 94);
+	resize: none;
+	overflow: hidden;
+	border: 1px solid rgb(224, 224, 224);
+	margin-left: 44px;
+	margin-top: 5px;
 }
 
 /* 페이징 css */

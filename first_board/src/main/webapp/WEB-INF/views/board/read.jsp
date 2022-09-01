@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <%@ include file="/WEB-INF/views/template/csslink.jsp" %>
 <!DOCTYPE html>
 <html>
@@ -15,6 +16,14 @@
 <%@ include file="/WEB-INF/views/template/font.jsp" %>
 
 <style type="text/css">
+
+.re_reply_wrap{
+	display: grid;
+	grid-template-columns: 40px 460px 155px 30px 30px;
+	column-gap: 5px;
+	height: 25px;
+	line-height: 25px;
+}
 .board_main_box_first_container {
 	flex-grow: 1;
 }
@@ -95,6 +104,12 @@
 .margin1{
 	margin-left: 50px;
 }
+a{
+	color: rgb(94, 94, 94);	 
+}
+a:hover{
+	text-decoration: underline;
+}
 
 /* grid box~! */
 #update_delete_btn{
@@ -158,113 +173,287 @@
 				<div class="project_board_read_content">${board.b_writer }</div>
 				<div class="project_board_read_title">작성일</div>
 				<div class="project_board_read_content">${board.b_write_date }</div>
-				
-				<%-- 
 				<c:if test="${not empty fileList }">
-				<div class="project_board_read_title">파일 업로드</div>
-				<div class="project_board_read_file_wrap">
-					<c:forEach items="${fileList }" var="file">
-						<div class="project_board_read_file"><span class="project_board_read_file_span" url="${file.pf_url }">${file.pf_name }</span></div>
-					</c:forEach>
-				</div>
-				</c:if>
-				 --%>
-				<%-- 
-				<div class="project_board_read_hr"></div>
-				<div class="project_board_read_comemnt_title">댓글</div>
-				<div class="project_board_read_comemnt_content_flex">
-					<div class="project_board_read_comemnt_content_wrap">
-						<div class="project_board_read_comemnt_content_profile_wrap">
-							<div class="project_board_read_comemnt_content_profile_img"><c:if test="${not empty loginSSInfo.profile}"><img src="${loginSSInfo.profile}"></c:if></div>
-							<div class="project_board_read_comment_content_profile_flex">
-								<div class="project_board_read_comemnt_content_profile_name">${loginSSInfo.m_nickname }</div>
-								<div class="project_board_read_comemnt_content_profile_job">회원</div>
-							</div>
+					<c:forEach items="${fileList }" var="file" varStatus="i">
+						<div class="project_board_read_title">첨부파일 ${i.count}</div>
+						<div class="project_board_read_content">
+						<a href="<%= request.getContextPath() %>${file.f_rename_filename}" download>${file.f_original_filename }</a> 
 						</div>
-						<div class="project_board_read_comemnt_content_input_wrap">
-							<textarea type="text" class="project_board_read_comemnt_content_input" name=""></textarea>
-							<button type="button" class="project_board_read_comemnt_content_input_btn">등록</button>
+					</c:forEach>
+				</c:if>
+				<c:if test="${empty fileList }">
+						<div class="project_board_read_title">첨부파일 없음</div>
+						<div class="project_board_read_content">
+						</div>
+				</c:if>
+				
+				<div class="project_board_read_hr"></div>
+				<div class="project_board_read_comment_title">댓글</div>
+				<div class="project_board_read_comment_content_flex">
+					<c:forEach items="${commentList }" var="comment">
+						<div class="project_board_read_comment_content_wrap">
+							<div class="project_board_read_comment_content_profile_wrap ">
+								<c:if test="${comment.c_level ne 0}">
+									<div class="re_reply_wrap">
+										<div></div>
+										<div class="project_board_read_reply_comment_content">
+										<c:forEach begin="1" end="${comment.c_level }"> 
+														&#8618;
+										</c:forEach>
+										${comment.c_writer} : ${comment.c_comment } &nbsp;&nbsp;&nbsp;
+										</div>
+										<div class="project_board_read_comment_content_date" style="line-height: 25px">${fn:substring(comment.c_write_date, 0, 19) }</div>
+										<c:if test="${loginSSInfo.m_id eq comment.m_id }">
+											<button type="button" c_no="${comment.c_no }" class="project_board_read_comment_content_delete_btn">삭제</button>
+										</c:if>
+										<c:if test="${loginSSInfo.m_id eq comment.m_id }">
+											<button type="button" c_no="${comment.c_no }" class="project_board_read_comment_content_update_btn">수정</button>
+										</c:if>
+										<c:if test="${loginSSInfo.m_id ne comment.m_id }">
+											<button type="button" c_no="${comment.c_no }" class="project_board_read_comment_content_reply_btn">답글</button>
+										</c:if>
+									</div>
+								</c:if>
+								<c:if test="${comment.c_level eq 0}">
+									<div class="project_board_read_comment_content_profile_img"><img src="<%= request.getContextPath() %>/resources/images/profile.jpg"></div>
+									<div class="project_board_read_comment_content_profile_flex">
+										<div class="project_board_read_comment_content_profile_name">${comment.c_writer}</div>
+										<div class="project_board_read_comment_content_profile_job">회원</div>
+									</div>
+									<div class="project_board_read_comment_content_date">${fn:substring(comment.c_write_date, 0, 19) }</div>
+									<c:if test="${loginSSInfo.m_id eq comment.m_id }">
+										<button type="button" c_no="${comment.c_no }" class="project_board_read_comment_content_delete_btn">삭제</button>
+									</c:if>
+									<c:if test="${loginSSInfo.m_id eq comment.m_id }">
+										<button type="button" c_no="${comment.c_no }" class="project_board_read_comment_content_update_btn">수정</button>
+									</c:if>
+									<c:if test="${loginSSInfo.m_id ne comment.m_id }">
+										<button type="button" c_no="${comment.c_no }" class="project_board_read_comment_content_reply_btn">답글</button>
+									</c:if>
+								</c:if>
+							</div>
+							<c:if test="${comment.c_level eq 0}">
+								<div class="project_board_read_comment_content_input_wrap">
+										<div class="project_board_read_comment_content">
+										<c:forEach begin="1" end="${comment.c_level }"> 
+														&#8618;
+										</c:forEach>
+										${comment.c_comment }
+										</div>
+								</div>	
+							</c:if>
+							<c:if test="${comment.c_level ne 0}">
+								
+							</c:if>
+							
+						</div>
+					</c:forEach>
+					<div class="project_board_read_comment_content_wrap">
+						<div class="project_board_read_comment_content_input_wrap">
+							<textarea type="text" class="project_board_read_comment_content_input" name=""></textarea>
+							<button type="button" class="btn_format_mini_gray" id="project_board_read_comment_content_input_btn">등록</button>
 						</div>
 					</div>
-					<c:forEach items="${commentList }" var="comment">
-						<div class="project_board_read_comemnt_content_wrap">
-							<div class="project_board_read_comemnt_content_profile_wrap">
-								<div class="project_board_read_comemnt_content_profile_img"><c:if test="${not empty comment.profile}"><img src="${comment.profile}"></c:if></div>
-								<div class="project_board_read_comment_content_profile_flex">
-									<div class="project_board_read_comemnt_content_profile_name">${comment.name }</div>
-									<div class="project_board_read_comemnt_content_profile_job">${comment.job_title }</div>
-								</div>
-								<div class="project_board_read_comemnt_content_date"></div>
-								<c:if test="${loginSSInfo.emp_no eq comment.emp_no }">
-									<button type="button" pc_no="${comment.pc_no }" class="project_board_read_comemnt_content_delete_btn">삭제</button>
-								</c:if>
-								<c:if test="${loginSSInfo.emp_no eq comment.emp_no }">
-									<button type="button" pc_no="${comment.pc_no }" class="project_board_read_comemnt_content_update_btn">수정</button>
-								</c:if>
-							</div>
-							<div class="project_board_read_comemnt_content_input_wrap">
-								<div class="project_board_read_comemnt_content">${comment.pc_content }</div>
-							</div>
-						</div>
-					</c:forEach>
 				</div>
-				 --%>
+			
 				
 			</div>
-			<button class="project_board_read_btn btn_format_mini">확인</button>
+			<button class="project_board_read_btn btn_format_mini" id="ok_btn">확인</button>
 			</div>
 		
 		</div>
 	</div>
 </section>
 <script>
+//게시글 번호
+var js_b_no = (new URL(location.href).searchParams).get('b_no');
+
+
 	$(function(){
 	  if(${loginSSInfo.m_nickname ne board.b_writer }){
 		  $(".btn_d_u").hide();
 	  }
 	});
 	
-	$("#board_cancel").on("click", function(){
-		location.href="<%= request.getContextPath()%>/";
-	})
-	
-	$("#board_submit").click(function(){
-		if($("#board_title").val() == "" || $("#board_content1").val() == ""){
-			alert("모두 작성해 주세요") ;
-			return;
-		}
+	$('#ok_btn').click(function() {
+		location.href = '<%= request.getContextPath()%>/';
+	});
+
+//대댓글 프사줄 없애기
+/* var c_list[] = ${commentList};
+console.log()
+$(function(){
+	if(  .c_level > 0 ){
+		$(".project_board_read_comment_content_profile_wrap").hide();
+	}
+}); */
+
+//댓글 등록
+	$("#project_board_read_comment_content_input_btn").on("click", function() {
 		$.ajax({
-			url: "<%=request.getContextPath()%>/board/insert",
-			type: "post",
-			data: {b_title : $('#board_title').val()
-				, b_content : $('#board_content1').val()
-				, bt_no : $('#board_type').val()
-				, b_writer : $('#b_writer').val()
-				, b_password : $('#b_password').val()
-				} ,
-			dataType:"json",
-			success: function(result){
-				console.log(result);
-				alert("글 등록을 완료했습니다."); 
-				location.href="<%= request.getContextPath()%>/"; 
-				
+			type: "POST",
+			url: "<%= request.getContextPath()%>/comment/insert",
+			dataType: "json",
+			data: {
+				b_no : js_b_no,
+				c_comment: $(".project_board_read_comment_content_input").val().replaceAll(/(\n|\r\n)/g, "<br>")
 			},
-			error: function(error){
-				alert("글 등록에 실패했습니다."); 
+			success: function(result) {
+				if(result == -1) {
+					alert("댓글 등록에 실패했습니다. 다시 시도해 주세요.");					
+				}
+				else {
+					console.log(result);
+					createCommentList(result);
+					$(".project_board_read_comment_content_input").val('');
+					alert("댓글이 등록되었습니다.");	
+					location.href="<%= request.getContextPath()%>/read?b_no="+js_b_no; 
+				}
+			},
+			error: function(request, status, error) {
+				alert("댓글 등록에 실패했습니다. 다시 시도해 주세요.");
 			}
 		});
 	});
-	
-////////날짜 유효성 ///////////
-//start input -> end min
-$("#att_date_start").on("input", function() {
-	$("#att_date_end").attr("min", $("#att_date_start").val());
-});
 
-// end input -> start max
-$("#att_date_end").on("input", function() {
-	$("#att_date_start").attr("max", $("#att_date_end").val());
-});
+//댓글 삭제
+	$(".project_board_read_comment_content_delete_btn").on("click", function(){
+		$.ajax({
+			type: "POST",
+			url: "<%= request.getContextPath()%>/comment/delete",
+			dataType: "json",
+			data: {
+				b_no : js_b_no,
+				c_no : $(this).attr("c_no")
+			},
+			success: function(result) {
+				if(result == -1) {
+					alert("댓글 삭제에 실패했습니다.");					
+				}
+				else {
+					console.log(result);
+					createCommentList(result);
+					alert("댓글이 삭제되었습니다.");	
+					location.href="<%= request.getContextPath()%>/read?b_no="+js_b_no; 
+				}
+			},
+			error: function(request, status, error) {
+				alert("댓글 삭제에 실패했습니다. 다시 시도해 주세요.");
+			}
+		});
+	});
+// 댓글 수정
+$(".project_board_read_comment_content_update_btn").on("click", updateBtnFnc);
+
+// 댓글 수정 버튼 수정 기능
+function updateBtnFnc() {
+	$(this).text("완료");
+	$(this).off("click");
+	$(this).on("click", updateDoCommentFnc);
+	let temtText = $(this).parent().next().children().text();
+	$(this).parent().next().children().remove();
+	$(this).parent().next().append('<textarea type="text" class="project_board_read_comemnt_content_input" name="">'+temtText+'</textarea>');
+}
+
+// 댓글 수정 함수 기능
+function updateDoCommentFnc() {
+	$.ajax({
+		type: "POST",
+		url: "<%= request.getContextPath()%>/comment/update",
+		dataType: "json",
+		data: {
+			c_no : $(this).attr("c_no"),
+			b_no : js_b_no,
+			c_comment : $(this).parent().next().children().val().replaceAll(/(\n|\r\n)/g, "<br>")
+		},
+		success: function(result) {
+			if(result == -1) {
+									
+			}
+			else {
+				console.log(result);
+				createCommentList(result);
+				alert("댓글이 수정되었습니다.");
+				location.href="<%= request.getContextPath()%>/read?b_no="+js_b_no; 
+			}
+		},
+		error: function(request, status, error) {
+			alert("댓글 수정에 실패했습니다. 다시 시도해 주세요.");
+		}
+	});
+}
+
+//대댓글 달기 
+$(".project_board_read_comment_content_reply_btn").on("click", replyBtnFnc);
+//대댓글 달기 버튼 수정 기능
+function replyBtnFnc() {
+	$(this).text("완료");
+	$(this).off("click");
+	$(this).on("click", replyDoCommentFnc);
+	let temtText = $(this).parent().next().children().text();
+	$(this).parent().parent().append('<textarea type="text" class="project_board_read_comemnt_content_input" name="" id="c_reply_content"></textarea>');
+}
+//대댓글 달기 함수 기능
+function replyDoCommentFnc() {
+	$.ajax({
+		type: "POST",
+		url: "<%= request.getContextPath()%>/comment/insert",
+		dataType: "json",
+		data: {
+			c_no : $(this).attr("c_no"),
+			b_no : js_b_no,
+			c_comment : $("#c_reply_content").val().replaceAll(/(\n|\r\n)/g, "<br>")
+		},
+		success: function(result) {
+			if(result == -1) {
+									
+			}
+			else {
+				console.log(result);
+				createCommentList(result);
+				alert("답글이 등록되었습니다.");	
+				location.href="<%= request.getContextPath()%>/read?b_no="+js_b_no; 
+			}
+		},
+		error: function(request, status, error) {
+			alert("답글 등록에 실패했습니다. 다시 시도해 주세요.");
+		}
+	});
+}
+
+// 댓글리스트 생성
+function createCommentList(commentList) {
+	$(".project_board_read_comment_content_wrap").eq(0).nextAll().remove();
+	for(var i = 0; i < commentList.length; i++) {
+		$(".project_board_read_comment_content_profile_wrap").last().append('<div class="project_board_read_comment_content_profile_flex"></div>');
+		$(".project_board_read_comment_content_profile_flex").last().append('<div class="project_board_read_comment_content_profile_name">'+commentList[i].c_writer+'</div>');
+		$(".project_board_read_comment_content_profile_flex").last().append('<div class="project_board_read_comment_content_profile_job">'+'회원'+'</div>');
+		$(".project_board_read_comment_content_profile_wrap").last().append('<div class="project_board_read_comment_content_date">'+commentList[i].c_write_date+'</div>');
+		$(".project_board_read_comment_content_input_wrap").last().append('<div class="project_board_read_comment_content">'+commentList[i].c_comment+'</div>');
+		if(commentList[i].m_id == '${loginSSInfo.m_id}') {
+			$(".project_board_read_comment_content_profile_wrap").last().append('<button type="button" pc_no="'+commentList[i].c_no+'" class="project_board_read_comment_content_delete_btn">삭제</button>');
+			$(".project_board_read_comment_content_profile_wrap").last().append('<button type="button" pc_no="'+commentList[i].c_no+'" class="project_board_read_comment_content_update_btn">수정</button>');
+		}
+		if(commentList[i].m_id != '${loginSSInfo.m_id}') {
+			$(".project_board_read_comment_content_profile_wrap").last().append('<button type="button" pc_no="'+commentList[i].c_no+'" class="project_board_read_comment_content_reply_btn">답글</button>');
+		}
+		
+		$(".project_board_read_comment_content_flex").append('<div class="project_board_read_comment_content_wrap"></div');
+		$(".project_board_read_comment_content_wrap").last().append('<div class="project_board_read_comment_content_profile_wrap"></div');
+		$(".project_board_read_comment_content_wrap").last().append('<div class="project_board_read_comment_content_input_wrap"></div');
+		$(".project_board_read_comment_content_profile_wrap").last().append('<div class="project_board_read_comment_content_profile_img"></div>');
+		$(".project_board_read_comment_content_profile_img").last().append('<img src="<%= request.getContextPath() %>/resources/images/profile.jpg">');
+		
+		
+	}
+	/* 
+	$(".project_board_read_comment_content_delete_btn").off("click");
+	$(".project_board_read_comment_content_delete_btn").on("click", deleteCommentFnc);
+	$(".project_board_read_comment_content_update_btn").off("click");
+	$(".project_board_read_comment_content_update_btn").on("click", updateBtnFnc);
+	 */
+}
+
 </script>
 </body>
 </html>

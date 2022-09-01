@@ -5,6 +5,7 @@ import java.util.List;
 import org.apache.ibatis.session.RowBounds;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.ean.first_board.board.domain.Board;
 import com.ean.first_board.board.model.dao.BoardDao;
@@ -33,9 +34,14 @@ public class BoardServiceImpl implements BoardService {
 		return dao.countBoard();
 	}
 
+	//글 상세조회
 	@Override
 	public Board selectBoard(int b_no) {
 		return dao.selectBoard(b_no);
+	}
+	@Override
+	public List<Board> selectFile(int b_no){
+		return dao.selectFile(b_no);
 	}
 
 	@Override
@@ -48,8 +54,32 @@ public class BoardServiceImpl implements BoardService {
 		return dao.deleteBoard(b_no);
 	}
 
+	@Override
+	public int updateCount(int b_no) {
+		return dao.updateCount(b_no);
+	}
 	
-	
-
-	
+//댓글
+	//댓글쓰기
+	@Override
+	@Transactional
+	public int insertComment(Board board) {
+		int result = dao.updateCommentSeq(board);
+		result += dao.insertComment(board);
+		return result;
+	}
+	//댓글리스트
+	@Override
+	public List<Board> selectCommentList(int b_no) {
+		return dao.selectCommentList(b_no);
+	}
+	//댓글 수정삭제
+	@Override
+	public int deleteComment(int c_no) {
+		return dao.deleteComment(c_no);
+	};
+	@Override
+	public int updateComment(Board board) {
+		return dao.updateComment(board);
+	};
 }

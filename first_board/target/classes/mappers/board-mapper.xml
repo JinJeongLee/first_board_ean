@@ -2,6 +2,21 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="Board">
 
+<insert id="insertBoard" parameterType="Board">
+	insert all
+	into tb_board (B_NO, B_TITLE, B_CONTENT, B_WRITER, B_WRITE_DATE, B_COUNT, M_ID, BT_NO)
+		values ((select nvl(max(b_no), 0)+1 from tb_board), #{b_title}, #{b_content}, #{b_writer}
+		, sysdate, 0, #{m_id}, #{bt_no})
+	<if test="file_list != null">
+		<foreach collection="file_list" item="item" index="index">
+			into tb_file (F_NO, F_ORIGINAL_FILENAME, F_RENAME_FILENAME, f_date, B_NO)
+				values ((select nvl(max(f_no), 0)+1+#{index} from tb_file), #{item.f_original_filename}, #{item.f_rename_filename}
+				,sysdate , (select nvl(max(b_no), 0)+1 from tb_board))
+		</foreach>
+	</if>
+	select * from dual
+</insert>
+<!-- 
 <insert id="insertBoard">
 	insert into tb_board
 		(B_NO, 
@@ -15,12 +30,13 @@
 		, #{bt_no}
 	)
 </insert>
-
+ -->
+ <!-- 게시글 목록조회~ -->
 <select id="selectBoardList" resultType="Board" parameterType="hashmap">
-	select b.*, t.bt_name 
+	select b.*, t.bt_name, fb.f_count
 	from tb_board b
-	left outer join tb_board_type t 
-    on b.bt_no = t.bt_no
+	left outer join tb_board_type t on b.bt_no = t.bt_no
+    left outer join (select count (*) f_count, f.b_no from tb_file f group by f.b_no) fb on fb.b_no = b.b_no
     <if test='selectVal != 0'>
     	where b.bt_no=#{selectVal}
     	<if test='searchVal != null and searchOpt.equals("title")'>
@@ -33,31 +49,41 @@
     		and b_writer like '%'||#{searchVal}||'%'
     	</if>
 	</if>
-	
-	<if test='searchVal != null and searchOpt.equals("title") and selectVal == 0'>
-   		where b_title like '%'||#{searchVal}||'%'
-   	</if> 
-   	<if test='searchVal != null and searchOpt.equals("content") and selectVal == 0'>
-   		where b_content like '%'||#{searchVal}||'%'
-   	</if>
-   	<if test='searchVal != null and searchOpt.equals("writer") and selectVal == 0'>
-   		where b_writer like '%'||#{searchVal}||'%'
-   	</if>
+	<if test="selectVal == 0">
+		<if test='searchVal != null and searchOpt.equals("title") and selectVal == 0'>
+	   		where b_title like '%'||#{searchVal}||'%'
+	   	</if> 
+	   	<if test='searchVal != null and searchOpt.equals("content") and selectVal == 0'>
+	   		where b_content like '%'||#{searchVal}||'%'
+	   	</if>
+	   	<if test='searchVal != null and searchOpt.equals("writer") and selectVal == 0'>
+	   		where b_writer like '%'||#{searchVal}||'%'
+	   	</if>
+	</if>
 
-    order by b_no desc
+    order by b.b_no desc
 </select>
 
 <select id="countBoard" resultType="_int">
 	select count (*) from tb_board
 </select>
 
+<!-- 게시글 상세조회~ -->
 <select id="selectBoard" resultType="Board" parameterType="_int">
-	select b.b_no, b_title, b_content, b_writer, b_write_date, b_count, f.*, c_writer, c_write_Date, c_comment
-	from tb_board b
-	left outer join tb_file f on b.b_no = f.b_no
-	left outer join tb_comment c on b.b_no = c.b_no
-	where b.b_no = #{b_no}
+	select b_no, b_title, b_content, b_writer, b_write_date, b_count
+	from tb_board 
+	where b_no = #{b_no}
 </select>
+<select id="selectFile" resultType="Board" parameterType="_int">
+	select * from tb_file
+	where b_no = #{b_no}
+</select>
+
+<update id="updateCount" parameterType="_int">
+	update tb_board 
+	set b_count = b_count+1 
+	where b_no = #{b_no}
+</update>
 
 <delete id="deleteBoard" parameterType="_int">
 	delete from tb_board
@@ -68,6 +94,54 @@
 	update tb_board
 	set b_title = #{b_title}, b_content = #{b_content}
 	where b_no = #{b_no}
+</update>
+
+<!-- 댓글~~ -->
+<insert id="insertComment" parameterType="Board">
+	insert into tb_comment (c_no
+	, b_no, m_id, c_writer, c_write_date, c_comment
+	, c_level
+	, c_ref
+	, c_seq)
+	values 
+	((select nvl(max(c_no), 0)+1 from tb_comment)
+	, #{b_no}, #{m_id}, #{c_writer}, sysdate, #{c_comment}
+	<choose>
+	<when test="refnum > 0">
+		, (select c_level+1 from tb_comment where c_no=#{refnum})
+		, #{refnum}
+		, (select c_seq+1 from tb_comment where c_no=#{refnum})
+	</when>
+	<otherwise>
+		, default
+		, (select nvl(max(c_no), 0)+1 from tb_comment)
+		, default
+	</otherwise>
+	</choose>	
+	)
+</insert>
+<update id="updateCommentSeq" parameterType="Board">
+<![CDATA[
+	update tb_comment set c_seq = c_seq+1
+	where c_ref = #{refnum}
+	and c_seq > (select c_seq from tb_comment where c_no=#{refnum})
+]]>
+</update>
+
+<select id="selectCommentList" parameterType="_int" resultType="Board">
+	select * from tb_comment
+	where b_no = #{b_no}
+	order by c_ref asc, c_write_date asc ,c_seq desc
+</select>
+
+<delete id="deleteComment" parameterType="_int">
+	delete from tb_comment where c_no = #{c_no}
+</delete>
+
+<update id="updateComment" parameterType="Board">
+	update tb_comment
+	set c_comment = #{c_comment}
+	where c_no = #{c_no}
 </update>
 
 </mapper>

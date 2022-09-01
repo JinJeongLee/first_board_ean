@@ -1,16 +1,4 @@
-select * from tb_board;
 
-select b.*, t.bt_name 
-	from tb_board b
-	left outer join tb_board_type t 
-    on b.bt_no = t.bt_no
-    order by b_no desc
-    ;
-select b.b_no, b_title, b_content, b_writer, b_write_date, b_count, f.*, c_writer, c_write_Date, c_comment
-	from tb_board b
-	left outer join tb_file f on b.b_no = f.b_no
-	left outer join tb_comment c on b.b_no = c.b_no
-	where b.b_no = 1;    
     
 insert into tb_board_type (bt_no, bt_name) values (1, '자유');
 insert into tb_board_type (bt_no, bt_name) values (2, '공지');
@@ -18,6 +6,7 @@ insert into tb_board_type (bt_no, bt_name) values (3, '유머');
 insert into tb_board_type (bt_no, bt_name) values (4, '뉴스');
     
 insert into tb_member (m_id, m_nickname, password) values ('member', '진정', '1234');
+insert into tb_member (m_id, m_nickname, password) values ('member1', '진정쓰', '1234');
 
 insert into tb_board values ((select nvl(max(b_no), 0)+1 from tb_board), '제목1', '내용1', '진정', sysdate, 0, 'member', 1);
 insert into tb_board values ((select nvl(max(b_no), 0)+1 from tb_board), '제목2', '내용2', '진정', sysdate, 0, 'member', 2);

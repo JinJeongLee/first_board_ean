@@ -109,9 +109,10 @@
 		
 		<div id="board_main_container">
 			<div class="board_hr_main_box">
+				<form action="" method="get">
 				<div class="board_main_box_content">
 					<div id="select_write_box">
-						<select name="board_type" id="board_type">
+						<select name="option" id="board_type">
 				        	<option value="0">전체</option>
 				        	<option value="1">자유</option>
 				        	<option value="2">공지</option>
@@ -136,10 +137,10 @@
 						</tr>
 						<c:forEach items="${boardList}" var="list">
 							<tr class="list">
-								<td class="tb_read">${list.b_no}</td>
+								<td >${list.b_no}</td>
 								<td >${list.bt_name}</td>
 								<td class="tb_read">${list.b_title}</td>
-								<td >몰라요</td>
+								<td >${list.f_count}개</td>
 								<td >${list.b_writer}</td>
 								<td >${list.b_write_date}</td>
 								<td >${list.b_count}</td>
@@ -166,7 +167,7 @@
 				</div>
 				<div class="board_main_box_content" id="search_box_button_container">
 					<div id="search_box_button">
-						<form action="" method="post">
+						
 							<select id="search_select" name="searchOpt">
 								<option value="title">제목</option>
 								<option value="content">내용</option>
@@ -174,10 +175,10 @@
 							</select>
 							<input id="search_box" name="searchVal" type="text" placeholder="검색어를 입력해주세요.">
 							<button type="submit" class="btn_format_mini_gray">검색</button>
-						</form>
 					</div>
 				</div>
-				
+				<input type="hidden" name="page" value="${page }">
+				</form>
 			</div>
 			
 		</div>
@@ -233,13 +234,26 @@ var js_page_no = (new URL(location.href).searchParams).get('page');
 // 페이지처리
 $(".page").on('click', function() {
 		var option = $("#board_type").val();
-		if($(this).hasClass('page_prev')) {
-			location.href="<%= request.getContextPath() %>/?page=${startPage-1}&option="+option;
-		} else if($(this).hasClass('page_num')) {
-			location.href="<%= request.getContextPath() %>/?page="+$(this).text()+"&option="+option;
-		} else if($(this).hasClass('page_post')) {
-			location.href="<%= request.getContextPath() %>/?page=${endPage+1}&option="+option;
-		}
+		var searchVal = '${searchVal}';
+		var searchOpt = '${searchOpt}';
+		
+		if(searchVal != ""){
+			if($(this).hasClass('page_prev')) {
+				location.href="<%= request.getContextPath() %>/?page=${startPage-1}&option="+option+"&searchOpt="+searchOpt+"&searchVal="+searchVal;
+			} else if($(this).hasClass('page_num')) {
+				location.href="<%= request.getContextPath() %>/?page="+$(this).text()+"&option="+option+"&searchOpt="+searchOpt+"&searchVal="+searchVal;
+			} else if($(this).hasClass('page_post')) {
+				location.href="<%= request.getContextPath() %>/?page=${endPage+1}&option="+option+"&searchOpt="+searchOpt+"&searchVal="+searchVal;
+			}
+		} else{
+			if($(this).hasClass('page_prev')) {
+				location.href="<%= request.getContextPath() %>/?page=${startPage-1}&option="+option;
+			} else if($(this).hasClass('page_num')) {
+				location.href="<%= request.getContextPath() %>/?page="+$(this).text()+"&option="+option;
+			} else if($(this).hasClass('page_post')) {
+				location.href="<%= request.getContextPath() %>/?page=${endPage+1}&option="+option;
+			}
+		} 
 	});
 
 for(var i = 0; i < $(".page_num").length; i++) {

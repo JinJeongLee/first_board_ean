@@ -136,40 +136,42 @@
 		<div id="board_main_container">
 			<div class="board_hr_main_box">
 				<div class="board_main_box_content">
-					<div>
-			            <p id="board_write" class="font_title">제목</p>
-			        </div>
-			        <div>
-			            <input id="board_title" name="b_title" type="text" placeholder="제목 입력">
-			        </div>
-			        <div id="board_content" class="font_title" >
-			            내용
-			        </div>
-			        <div id="textEditer">
-			            <textarea id="board_content1" name="b_content" placeholder="내용을 입력해 주세요."></textarea>
-			        	
-			        </div>
-			        <div id="board_row3">
-				        <div class="font_title" >글 종류</div>
-				        <select name="board_type" id="board_type">
-				        	<option value="1">자유</option>
-				        	<option value="2">공지</option>
-				        	<option value="3">유머</option>
-				        	<option value="4">뉴스</option>
-				        </select>
-				        <div class="font_title margin1" >첨부파일</div>
-				        <input type="file">
-			        </div><!-- 
-			        <div id="board_row4">
-				        <div class="font_title" >닉네임</div>
-				        <input id="b_writer" type="text">
-				        <div class="font_title margin1" >비밀번호</div>
-				        <input id="b_password" type="text">
-			        </div> -->
-			        <div id="btn_cancel_submit">
-			            <button type="button" id="board_cancel" class="btn_format_mini">취소</button>
-			            <button id="board_submit" type="button" class="btn_format_mini">등록</button>
-			        </div>
+					<form action="insert" method="post" id="insert_frm" enctype="multipart/form-data">
+						<div>
+				            <p id="board_write" class="font_title">제목</p>
+				        </div>
+				        <div>
+				            <input id="board_title" name="b_title" type="text" placeholder="제목 입력">
+				        </div>
+				        <div id="board_content" class="font_title" >
+				            내용
+				        </div>
+				        <div id="textEditer">
+				            <textarea id="board_content1" name="b_content" placeholder="내용을 입력해 주세요."></textarea>
+				        	
+				        </div>
+				        <div id="board_row3">
+					        <div class="font_title" >글 종류</div>
+					        <select name="bt_no" id="board_type">
+					        	<option value="1">자유</option>
+					        	<option value="2">공지</option>
+					        	<option value="3">유머</option>
+					        	<option value="4">뉴스</option>
+					        </select>
+					        <div class="font_title margin1" >첨부파일</div>
+					        <input type="file" name="uploadfile" id="uploadfile" multiple>
+				        </div><!-- 
+				        <div id="board_row4">
+					        <div class="font_title" >닉네임</div>
+					        <input id="b_writer" type="text">
+					        <div class="font_title margin1" >비밀번호</div>
+					        <input id="b_password" type="text">
+				        </div> -->
+				        <div id="btn_cancel_submit">
+				            <button type="button" id="board_cancel" class="btn_format_mini">취소</button>
+				            <button id="board_submit" type="button" class="btn_format_mini">등록</button>
+				        </div>
+					</form>
 				</div>
 				
 			</div>
@@ -184,10 +186,15 @@
 	
 	$("#board_submit").click(function(){
 		if($("#board_title").val() == "" || $("#board_content1").val() == ""){
-			alert("모두 작성해 주세요") ;
+			alert("제목과 내용을 모두 작성해 주세요") ;
 			return;
 		}
-		var file = $('#attachFile')[0].files[0];
+		if(!($("#uploadfile").val())){
+			$("#uploadfile").remove();
+		}
+		$("#insert_frm").submit();
+	
+		<%-- var file = $('#attachFile')[0].files[0];
 		var fileData = new FormData();
 		
 		formData.append('files', form);
@@ -211,7 +218,7 @@
 			error: function(error){
 				alert("글 등록에 실패했습니다."); 
 			}
-		});
+		}); --%>
 	});
 	
 ////////날짜 유효성 ///////////
