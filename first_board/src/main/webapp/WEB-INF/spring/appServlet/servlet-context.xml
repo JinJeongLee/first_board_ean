@@ -19,16 +19,18 @@
 	<!-- Handles HTTP GET requests for /resources/** by efficiently serving up static resources in the ${webappRoot}/resources directory -->
 	<resources mapping="/resources/**" location="/resources/" />
 
+	<beans:bean id="beanNameViewResolver" class="org.springframework.web.servlet.view.BeanNameViewResolver">
+        <beans:property name="order" value="0"/>
+    </beans:bean>
+
 	<!-- Resolves views selected for rendering by @Controllers to .jsp resources in the /WEB-INF/views directory -->
 	<beans:bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
 		<beans:property name="prefix" value="/WEB-INF/views/" />
 		<beans:property name="suffix" value=".jsp" />
+		<beans:property name="order" value="1"/>
 	</beans:bean>
 	
-	<beans:bean id="viewResolver1" class="org.springframework.web.servlet.view.XmlViewResolver">
-        <beans:property name="order" value="1"/>
-        <beans:property name="location" value="/WEB-INF/views.xml"/>
-    </beans:bean>
+	 <beans:bean id="excelDownloadView" class="com.ean.first_board.common.ExcelDownloadView"/>
 	
 	<context:component-scan base-package="com.ean.first_board" />
 	

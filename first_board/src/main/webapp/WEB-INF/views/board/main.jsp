@@ -45,6 +45,8 @@
 
 #write_board{
 	text-align: right;
+	display: flex;
+	gap: 5px;
 }
 
 #search_box_button{
@@ -69,7 +71,7 @@
 
 #select_write_box{
 	display: flex;
-	gap: 850px;
+	gap: 750px;
 }
 
 
@@ -120,6 +122,7 @@
 				        	<option value="4">뉴스</option>
 				        </select>
 						<div id="write_board">
+							<button type="button" class="btn_format_mini" id="download_btn">Download</button>
 							<button type="button" class="btn_format_mini" id="write_btn">글쓰기</button>
 						</div>
 					</div>
@@ -179,6 +182,11 @@
 				</div>
 				<input type="hidden" name="page" value="${page }">
 				</form>
+				<form action="downloadExcelFile" id="exelForm" method="post" enctype="multipart/form-data">
+					<input type="hidden" name="option" value="${option}">
+					<input type="hidden" name="searchVal" value="${searchVal}">
+					<input type="hidden" name="searchOpt" value="${searchOpt}">
+				</form>
 			</div>
 			
 		</div>
@@ -189,27 +197,42 @@
 	$("#write_btn").on("click", function(){
 		location.href="<%= request.getContextPath()%>/insert";
 	})
-	<%-- 
-	$(".tb_read").click(function(){
-		$.ajax({
-			url: "<%=request.getContextPath()%>/hr/employee/select",
-			type: "post",
-			data: {b_no: $(this).nextAll(".last_tb").children(".empNo").val()},
-			dataType: "json",
-			success: function(result){
-				
-			},
-			error: function(result){
-				console.log("직원 상세 정보 ajax 오류");
-			}
-		});
-		
-	}); --%>
+	
 // 게시글 상세보기 페이지 이동
 $(".tb_read").on("click", function(){
 	var b_no = $(this).siblings().first().text() ;
 	location.href = "<%= request.getContextPath()%>/read?b_no="+b_no;
 })
+
+// 엑셀 다운로드
+	$("#download_btn").on('click', function() {
+		$("#exelForm").submit();
+		<%-- var option = '${option}';
+		var searchVal = '${searchVal}';
+		var searchOpt = '${searchOpt}';
+		
+		$.ajax({
+            url: "downloadExcelFile",
+            data: {
+            	option : option
+            	, searchVal : searchVal
+            	, searchOpt : searchOpt
+            }
+            ,
+            type: "POST",
+            success: function(result){
+                console.log(result);
+                
+                document.getElementById('result').innerHTML = JSON.stringify(data);
+                location.href="<%= request.getContextPath()%>/?page=1&option="+option+"&searchOpt="+searchOpt+"&searchVal="+searchVal; 
+               
+                location.href="";
+            },
+            error: function(request, status, error) {
+				alert("파일 다운로드에 실패했습니다. 다시 시도해 주세요.");
+			}
+        }); --%>
+	});
 
 // 핉터 정렬 
 	$("#board_type").on('change', function() {

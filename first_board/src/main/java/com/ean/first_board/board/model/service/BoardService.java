@@ -3,6 +3,7 @@ package com.ean.first_board.board.model.service;
 import java.util.List;
 
 import org.apache.ibatis.session.RowBounds;
+import org.apache.poi.xssf.streaming.SXSSFWorkbook;
 
 import com.ean.first_board.board.domain.Board;
 
@@ -33,4 +34,20 @@ public interface BoardService {
 	//댓글 수정 삭제
 		public int deleteComment(int c_no);
 		public int updateComment(Board board);
+		
+//파일
+	 /**
+     * 과일 리스트를 간단한 엑셀 워크북 객체로 생성
+     * @param list
+     * @return 생성된 워크북
+     */	
+	public SXSSFWorkbook makeSimpleboardExcelWorkbook(List<Board> list);
+	
+	/**
+     * 생성한 엑셀 워크북을 컨트롤레에서 받게해줄 메소
+     * @param list
+     * @return
+     */
+    public SXSSFWorkbook excelFileDownloadProcess(List<Board> list);
+	
 }

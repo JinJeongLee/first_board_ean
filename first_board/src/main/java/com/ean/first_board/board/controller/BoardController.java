@@ -3,14 +3,17 @@ package com.ean.first_board.board.controller;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.apache.ibatis.session.RowBounds;
+import org.apache.poi.xssf.streaming.SXSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -308,7 +311,30 @@ public class BoardController {
 		return gson.toJson(commentList);
 	}
 	
+	@PostMapping("/downloadExcelFile")
+	 public String downloadExcelFile(
+			 @RequestParam(name="list", required = false) List<Board> list
+			, @RequestParam(name="option", required = false, defaultValue = "0") int selectVal
+			, @RequestParam(name="searchOpt", required = false, defaultValue = "title") String searchOpt
+			, @RequestParam(name="searchVal", required = false) String searchVal
+			, Model model
+			 ) {
+		RowBounds rowBounds = new RowBounds();
+		if(searchVal != null) {
+			list = service.selectBoardList(searchVal, searchOpt, selectVal, rowBounds);
+		} else {
+			list = service.selectBoardList(selectVal, rowBounds);
+			
+		}
+		SXSSFWorkbook workbook = service.excelFileDownloadProcess(list);
+		
+		model.addAttribute("locale", Locale.KOREA);
+		model.addAttribute("workbook", workbook);
+		model.addAttribute("workbookName", "게시판");
+		return "excelDownloadView";
+	}
 	
+
 	/*
 	 * @GetMapping("/list") public ModelAndView selectNotice(ModelAndView mv,
 	 * 

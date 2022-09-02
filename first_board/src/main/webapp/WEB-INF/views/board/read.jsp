@@ -30,6 +30,9 @@
 #cke_1_bottom{
 	display: none;
 }
+#c_reply_content{
+	width: 590px;
+}
 /* #insert_board_box_top{
 	width: 240px;
 	height: 36px;
@@ -207,10 +210,12 @@ a:hover{
 											<button type="button" c_no="${comment.c_no }" class="project_board_read_comment_content_delete_btn">삭제</button>
 										</c:if>
 										<c:if test="${loginSSInfo.m_id eq comment.m_id }">
-											<button type="button" c_no="${comment.c_no }" class="project_board_read_comment_content_update_btn">수정</button>
+											<div></div>
+											<%-- <button type="button" c_no="${comment.c_no }" class="project_board_read_comment_content_update_btn">수정</button> --%>
 										</c:if>
 										<c:if test="${loginSSInfo.m_id ne comment.m_id }">
-											<button type="button" c_no="${comment.c_no }" class="project_board_read_comment_content_reply_btn">답글</button>
+											<div></div>
+											<%-- <button type="button" c_no="${comment.c_no }" class="project_board_read_comment_content_reply_btn">답글</button> --%>
 										</c:if>
 									</div>
 								</c:if>

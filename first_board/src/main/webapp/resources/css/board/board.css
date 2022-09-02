@@ -609,7 +609,6 @@ hr{
 	margin-left: 46px;
 }
 .project_board_read_reply_comment_content {
-	
 	width: 510px;
 	font-size: 13px;
 	font-family: NotoSansR;
@@ -625,6 +624,13 @@ hr{
 	border: 1px solid rgb(224, 224, 224);
 	margin-left: 44px;
 	margin-top: 5px;
+}
+
+.board_input_count{
+	font-size: 13px;
+	font-family: NotoSansR;
+	color: rgb(94, 94, 94);
+	margin-left: 1px;
 }
 
 /* 페이징 css */
@@ -645,4 +651,5 @@ hr{
     display: inline-block;
     margin: 0px 2px;
     font-size: 10.5px;
+    cursor: pointer;
  }

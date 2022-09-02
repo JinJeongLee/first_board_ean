@@ -142,13 +142,14 @@
 				        </div>
 				        <div>
 				            <input id="board_title" name="b_title" type="text" placeholder="제목 입력">
+				        	<div class="board_input_count" id="title_input_cnt">0/90</div>
 				        </div>
 				        <div id="board_content" class="font_title" >
 				            내용
 				        </div>
 				        <div id="textEditer">
 				            <textarea id="board_content1" name="b_content" placeholder="내용을 입력해 주세요."></textarea>
-				        	
+				        	<div class="board_input_count" id="content_input_cnt">0/1000</div>
 				        </div>
 				        <div id="board_row3">
 					        <div class="font_title" >글 종류</div>
@@ -180,10 +181,12 @@
 	</div>
 </section>
 <script>
+	// 누르면 다시 메인가기
 	$("#board_cancel").on("click", function(){
 		location.href="<%= request.getContextPath()%>/";
 	})
 	
+	// 글쓰기
 	$("#board_submit").click(function(){
 		if($("#board_title").val() == "" || $("#board_content1").val() == ""){
 			alert("제목과 내용을 모두 작성해 주세요") ;
@@ -194,43 +197,43 @@
 		}
 		$("#insert_frm").submit();
 	
-		<%-- var file = $('#attachFile')[0].files[0];
-		var fileData = new FormData();
-		
-		formData.append('files', form);
-		$.ajax({
-			url: "<%=request.getContextPath()%>/insert",
-			type: "post",
-			enctype: 'multipart/form-data',
-			data: {b_title : $('#board_title').val()
-				, b_content : $('#board_content1').val()
-				, bt_no : $('#board_type').val()
-				, b_writer : "${loginSSInfo.m_nickname}"
-				, m_id : "${loginSSInfo.m_id}"
-				} ,
-	/* 		dataType:"json", */
-			success: function(result){
-				console.log(result);
-				alert("글 등록을 완료했습니다."); 
-				location.href="<%= request.getContextPath()%>/"; 
-				
-			},
-			error: function(error){
-				alert("글 등록에 실패했습니다."); 
-			}
-		}); --%>
 	});
 	
-////////날짜 유효성 ///////////
-//start input -> end min
-$("#att_date_start").on("input", function() {
-	$("#att_date_end").attr("min", $("#att_date_start").val());
+////////글자수 유효성 ///////////
+var strByteLength = function(s,b,i,c){
+  for(b=i=0;c=s.charCodeAt(i++);b+=c>>11?3:c>>7?2:1);
+  return b
+}
+console.log(strByteLength("a한글b") + " Bytes");
+
+$('#board_content1').on('input', function(){
+	let contentCount = strByteLength($(this).val());
+	if(contentCount.length == 0 || contentCount == '') {
+		$('#content_input_cnt').text('0/1000');
+	} else {
+		$('#content_input_cnt').text(contentCount+'/1000');
+	}
+	if(contentCount > 1000) {
+		$(this).val($(this).val().substring(0, 300));
+		alert('내용은 1000byte 까지 입력 가능합니다.')
+		$('#content_input_cnt').text('1000/1000');
+	}
 });
 
-// end input -> start max
-$("#att_date_end").on("input", function() {
-	$("#att_date_start").attr("max", $("#att_date_end").val());
+$('#board_title').on('input', function(){
+	let contentCount = strByteLength($(this).val());
+	if(contentCount.length == 0 || contentCount == '') {
+		$('#title_input_cnt').text('0/90');
+	} else {
+		$('#title_input_cnt').text(contentCount+'/90');
+	}
+	if(contentCount > 90) {
+		$(this).val($(this).val().substring(0, 30));
+		alert('제목은 한글 30자, 영어 90자 까지 입력 가능합니다.')
+		$('#title_input_cnt').text('90/90');
+	}
 });
+
 </script>
 </body>
 </html>
