@@ -165,6 +165,8 @@ a:hover{
 					</form>
 					<form action="update" method="get">
 						<input type="hidden" name="b_no" value="${board.b_no}">
+						<input type="hidden" name="b_title" value="${board.b_title}">
+						<input type="hidden" name="b_content" value="${board.b_content}">
 						<button class="btn_format_mini_gray btn_d_u">수정</button>
 					</form>
 					</div>
@@ -199,12 +201,7 @@ a:hover{
 								<c:if test="${comment.c_level ne 0}">
 									<div class="re_reply_wrap">
 										<div></div>
-										<div class="project_board_read_reply_comment_content">
-										<c:forEach begin="1" end="${comment.c_level }"> 
-														&#8618;
-										</c:forEach>
-										${comment.c_writer} : ${comment.c_comment } &nbsp;&nbsp;&nbsp;
-										</div>
+										<div class="project_board_read_reply_comment_content"><c:forEach begin="1" end="${comment.c_level }">&#8618;</c:forEach>${comment.c_writer} : ${comment.c_comment } &nbsp;&nbsp;&nbsp;</div>
 										<div class="project_board_read_comment_content_date" style="line-height: 25px">${fn:substring(comment.c_write_date, 0, 19) }</div>
 										<c:if test="${loginSSInfo.m_id eq comment.m_id }">
 											<button type="button" c_no="${comment.c_no }" class="project_board_read_comment_content_delete_btn">삭제</button>
@@ -226,7 +223,7 @@ a:hover{
 										<div class="project_board_read_comment_content_profile_job">회원</div>
 									</div>
 									<div class="project_board_read_comment_content_date">${fn:substring(comment.c_write_date, 0, 19) }</div>
-									<c:if test="${loginSSInfo.m_id eq comment.m_id }">
+									<c:if test="${loginSSInfo.m_id eq comment.m_id }"> 
 										<button type="button" c_no="${comment.c_no }" class="project_board_read_comment_content_delete_btn">삭제</button>
 									</c:if>
 									<c:if test="${loginSSInfo.m_id eq comment.m_id }">
@@ -239,12 +236,7 @@ a:hover{
 							</div>
 							<c:if test="${comment.c_level eq 0}">
 								<div class="project_board_read_comment_content_input_wrap">
-										<div class="project_board_read_comment_content">
-										<c:forEach begin="1" end="${comment.c_level }"> 
-														&#8618;
-										</c:forEach>
-										${comment.c_comment }
-										</div>
+										<div class="project_board_read_comment_content">${comment.c_comment }</div>
 								</div>	
 							</c:if>
 							<c:if test="${comment.c_level ne 0}">
@@ -281,7 +273,7 @@ var js_b_no = (new URL(location.href).searchParams).get('b_no');
 	});
 	
 	$('#ok_btn').click(function() {
-		location.href = '<%= request.getContextPath()%>/';
+		history.back();
 	});
 
 //대댓글 프사줄 없애기
@@ -357,7 +349,7 @@ function updateBtnFnc() {
 	$(this).on("click", updateDoCommentFnc);
 	let temtText = $(this).parent().next().children().text();
 	$(this).parent().next().children().remove();
-	$(this).parent().next().append('<textarea type="text" class="project_board_read_comemnt_content_input" name="">'+temtText+'</textarea>');
+	$(this).parent().next().append('<textarea class="project_board_read_comemnt_content_input" name="">'+temtText+'</textarea>');
 }
 
 // 댓글 수정 함수 기능
@@ -451,13 +443,45 @@ function createCommentList(commentList) {
 		
 		
 	}
-	/* 
-	$(".project_board_read_comment_content_delete_btn").off("click");
-	$(".project_board_read_comment_content_delete_btn").on("click", deleteCommentFnc);
 	$(".project_board_read_comment_content_update_btn").off("click");
 	$(".project_board_read_comment_content_update_btn").on("click", updateBtnFnc);
-	 */
+	
 }
+
+/////댓글쓸때 유효성
+//바이트수 구하기
+var strByteLength = function(s,b,i,c){
+  for(b=i=0;c=s.charCodeAt(i++);b+=c>>11?3:c>>7?2:1);
+  return b
+}
+//바이트까지 자르기
+String.prototype.cutByte = function(len) {
+     var str = this;
+     var l = 0;
+     for (var i=0; i<str.length; i++) {
+	         l += (str.charCodeAt(i) > 128) ? 3 : 1;
+	      if (l > len) return str.substring(0, i);
+	     }
+     return str;
+ }
+$('.project_board_read_comment_content_input').on('input', function(){
+	let contentCount = strByteLength($(this).val());
+	let str = $(this).val();
+	
+	if(contentCount > 90) {
+		$(this).val(str.cutByte(90));
+		alert('댓글은 한글 30자, 영어 90자 까지 입력 가능합니다.')
+	}
+});
+$('.project_board_read_comemnt_content_input').on('input', function(){
+	let contentCount = strByteLength($(this).val());
+	let str = $(this).val();
+	
+	if(contentCount > 90) {
+		$(this).val(str.cutByte(90));
+		alert('댓글은 한글 30자, 영어 90자 까지 입력 가능합니다.')
+	}
+});
 
 </script>
 </body>

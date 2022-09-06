@@ -106,11 +106,13 @@ public class BoardServiceImpl implements BoardService {
         sheet.setColumnWidth(0, 1500);
         sheet.setColumnWidth(0, 1500);
         sheet.setColumnWidth(0, 3000);
-        sheet.setColumnWidth(0, 9000);
+        sheet.setColumnWidth(0, 18000);
         sheet.setColumnWidth(0, 1500);
         sheet.setColumnWidth(0, 3000);
         sheet.setColumnWidth(0, 6000);
         sheet.setColumnWidth(0, 1500);
+        
+   
         
         // 헤더 행 생
         Row headerRow = sheet.createRow(0);
@@ -167,7 +169,7 @@ public class BoardServiceImpl implements BoardService {
             bodyCell.setCellValue(board.getB_writer());
             // 데이터 6 표시
             bodyCell = bodyRow.createCell(6);
-            bodyCell.setCellValue(board.getB_write_date());
+            bodyCell.setCellValue(String.valueOf(board.getB_write_date()));
             // 데이터 7 표시
             bodyCell = bodyRow.createCell(7);
             bodyCell.setCellValue(board.getB_count());

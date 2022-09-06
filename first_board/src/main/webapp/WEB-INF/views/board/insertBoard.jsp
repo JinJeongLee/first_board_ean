@@ -200,21 +200,71 @@
 	});
 	
 ////////글자수 유효성 ///////////
+//바이트수 구하기
 var strByteLength = function(s,b,i,c){
   for(b=i=0;c=s.charCodeAt(i++);b+=c>>11?3:c>>7?2:1);
   return b
 }
-console.log(strByteLength("a한글b") + " Bytes");
+
+//바이트 자르기
+/* 
+String.prototype.cutByte = function(len) {
+	var str = this;
+	var count = 0;
+	for(var i = 0; i < str.length; i++) {
+		if(escape(str.charAt(i)).length >= 4)
+			count += 2;
+		else if(escape(str.charAt(i)) != "%0D")
+				count++;
+		if(count > len) {
+			if(escape(str.charAt(i)) == "%0A")
+				i--;
+			break;		
+		}
+	}
+	return str.substring(0, i);
+}
+ */
+ 
+ String.prototype.cutByte = function(len) {
+	     var str = this;
+	     var l = 0;
+	     for (var i=0; i<str.length; i++) {
+		         l += (str.charCodeAt(i) > 128) ? 3 : 1;
+		      if (l > len) return str.substring(0, i);
+		     }
+	     return str;
+	 }
+ 
+function Str_Cut(istr, size) {
+	var tmp = 0, cnt = 0;
+	var rtn = "";
+	for (var x = 0; x < istr.length; x++) {
+		tmp = istr[x].charCodeAt();
+		if (127 < tmp)	{
+			cnt++;
+		}
+		cnt++;
+		if (size <= cnt){
+			rtn = istr.substring(0, x);
+			x = 100000;
+		}
+	}
+	return rtn;
+}
+
 
 $('#board_content1').on('input', function(){
 	let contentCount = strByteLength($(this).val());
+	let str = $(this).val();
+	
 	if(contentCount.length == 0 || contentCount == '') {
 		$('#content_input_cnt').text('0/1000');
 	} else {
 		$('#content_input_cnt').text(contentCount+'/1000');
 	}
 	if(contentCount > 1000) {
-		$(this).val($(this).val().substring(0, 300));
+		$(this).val(str.cutByte(1000));
 		alert('내용은 1000byte 까지 입력 가능합니다.')
 		$('#content_input_cnt').text('1000/1000');
 	}
@@ -222,13 +272,15 @@ $('#board_content1').on('input', function(){
 
 $('#board_title').on('input', function(){
 	let contentCount = strByteLength($(this).val());
+	let str = $(this).val();
+	
 	if(contentCount.length == 0 || contentCount == '') {
 		$('#title_input_cnt').text('0/90');
 	} else {
 		$('#title_input_cnt').text(contentCount+'/90');
 	}
 	if(contentCount > 90) {
-		$(this).val($(this).val().substring(0, 30));
+		$(this).val(str.cutByte(90));
 		alert('제목은 한글 30자, 영어 90자 까지 입력 가능합니다.')
 		$('#title_input_cnt').text('90/90');
 	}

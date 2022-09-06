@@ -30,119 +30,101 @@ import com.ean.first_board.member.domain.Member;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
-
-
-
-
 @Controller
 //@RequestMapping("/board")
 public class BoardController {
-	
+
 	@Autowired
 	private BoardService service;
-	
+
 	@Autowired
 	private FileUpload commonfile;
-	
+
 	@GetMapping("/")
-	public ModelAndView viewBoard(ModelAndView mv
-			, @RequestParam(name="list", required = false) List<Board> list
-			, @RequestParam(name="page", required = false, defaultValue = "1") String page
-			, @RequestParam(name="option", required = false, defaultValue = "0") int selectVal
-			, @RequestParam(name="searchOpt", required = false, defaultValue = "title") String searchOpt
-			, @RequestParam(name="searchVal", required = false) String searchVal
-			, HttpSession session
-			, RedirectAttributes rattr
-			) {
-				
-		 if(session.getAttribute("loginSSInfo") == null) {
-		 rattr.addFlashAttribute("msg", "로그인 후 이용 가능합니다.");
-		 mv.setViewName("member/login"); //로그인으로 
-		 return mv; 
-		 }
-				 
+	public ModelAndView viewBoard(ModelAndView mv, @RequestParam(name = "list", required = false) List<Board> list,
+			@RequestParam(name = "page", required = false, defaultValue = "1") String page,
+			@RequestParam(name = "option", required = false, defaultValue = "0") int selectVal,
+			@RequestParam(name = "searchOpt", required = false, defaultValue = "title") String searchOpt,
+			@RequestParam(name = "searchVal", required = false) String searchVal, HttpSession session,
+			RedirectAttributes rattr) {
+
+		if (session.getAttribute("loginSSInfo") == null) {
+			rattr.addFlashAttribute("msg", "로그인 후 이용 가능합니다.");
+			mv.setViewName("member/login"); // 로그인으로
+			return mv;
+		}
+
 		int currentPage = 1; // 현재 페이지
 		int contentLimit = 10; // 한 페이지에 보여질 정보 갯수
-		
+
 		String currentPageStr = page;
 		try {
-			if(currentPageStr != null && !currentPageStr.equals("")) {
+			if (currentPageStr != null && !currentPageStr.equals("")) {
 				currentPage = Integer.parseInt(currentPageStr);
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		
+
 		int offset = (currentPage - 1) * contentLimit;
 		RowBounds rowBounds = new RowBounds(offset, contentLimit);
 		int listsize;
-		
-		if(searchVal != null) {
+
+		if (searchVal != null) {
 			list = service.selectBoardList(searchVal, searchOpt, selectVal, rowBounds);
-			listsize = list.size()	;
+			listsize = list.size();
 		} else {
-			listsize = service.countBoard()	;
+			listsize = service.countBoard();
 			list = service.selectBoardList(selectVal, rowBounds);
-			if(selectVal != 0) {
+			if (selectVal != 0) {
 				listsize = list.size();
 			}
 		}
-		int totalpageCnt = listsize/contentLimit + 1;
-		int startPage = currentPage - (((currentPage % 5) == 0)?4:((currentPage % 5)-1)); 
-		int endPage = ((startPage + 4) > totalpageCnt)?totalpageCnt:(startPage + 4);
-		
-		
+		int totalpageCnt = listsize / contentLimit + 1;
+		int startPage = currentPage - (((currentPage % 5) == 0) ? 4 : ((currentPage % 5) - 1));
+		int endPage = ((startPage + 4) > totalpageCnt) ? totalpageCnt : (startPage + 4);
+
 		mv.addObject("option", selectVal);
 		mv.addObject("boardList", list);
 		mv.addObject("totalpageCnt", totalpageCnt);
 		mv.addObject("startPage", startPage);
 		mv.addObject("endPage", endPage);
 		mv.addObject("page", page);
-		
+
 		mv.setViewName("board/main");
 
 		mv.addObject("searchOpt", searchOpt);
 		mv.addObject("searchVal", searchVal);
 		return mv;
 	}
-	
-	
+
 	@RequestMapping("/insert")
-	public ModelAndView viewInsertBoard(ModelAndView mv
-			, Board board
-			, HttpSession session
-			, RedirectAttributes rattr
-			) {
-		if(session.getAttribute("loginSSInfo") == null) {
+	public ModelAndView viewInsertBoard(ModelAndView mv, Board board, HttpSession session, RedirectAttributes rattr) {
+		if (session.getAttribute("loginSSInfo") == null) {
 			rattr.addFlashAttribute("msg", "로그인 후 이용 가능합니다.");
-			mv.setViewName("member/login"); //로그인으로
+			mv.setViewName("member/login"); // 로그인으로
 			return mv;
 		}
 		mv.setViewName("board/insertBoard");
 		return mv;
 	}
-	
+
 	@PostMapping("/insert")
-	public ModelAndView insertBoard(Board board
-			, ModelAndView mv
-			, HttpSession session
-			, HttpServletRequest req
-			, @RequestParam(name="b_title") String b_title
-			, @RequestParam(name="b_content") String b_content
-			, @RequestParam(name="bt_no") int bt_no
-			, @RequestParam(name="uploadfile", required = false) List<MultipartFile> multiFile
-			, RedirectAttributes rattr
-			) {
-		Member loginSSInfo = (Member)session.getAttribute("loginSSInfo");
+	public ModelAndView insertBoard(Board board, ModelAndView mv, HttpSession session, HttpServletRequest req,
+			@RequestParam(name = "b_title") String b_title, @RequestParam(name = "b_content") String b_content,
+			@RequestParam(name = "bt_no") int bt_no,
+			@RequestParam(name = "uploadfile", required = false) List<MultipartFile> multiFile,
+			RedirectAttributes rattr) {
+		Member loginSSInfo = (Member) session.getAttribute("loginSSInfo");
 		board.setB_title(b_title);
 		board.setB_content(b_content);
 		board.setBt_no(bt_no);
 		board.setB_writer(loginSSInfo.getM_nickname());
 		board.setM_id(loginSSInfo.getM_id());
-		
-		if(multiFile != null) {
+
+		if (multiFile != null) {
 			List<Map<String, String>> file_list = new ArrayList<Map<String, String>>();
-			for(int i=0; i<multiFile.size(); i++) {
+			for (int i = 0; i < multiFile.size(); i++) {
 				String rename_filename = commonfile.saveFile(multiFile.get(i), req);
 				Map<String, String> file_map = new HashMap<String, String>();
 				file_map.put("f_original_filename", multiFile.get(i).getOriginalFilename());
@@ -151,30 +133,25 @@ public class BoardController {
 			}
 			board.setFile_list(file_list);
 		}
-		
-		
+
 		int result = service.insertBoard(board);
-		if(result < 1) {
+		if (result < 1) {
 			rattr.addFlashAttribute("msg", "게시글 등록에 실패했습니다. 게시판으로 돌아갑니다.");
 			mv.setViewName("redirect:/");
-		} else { 
+		} else {
 			rattr.addFlashAttribute("msg", "글 등록에 성공했습니다.");
 			mv.setViewName("redirect:/");
-			
+
 		}
 		return mv;
 	}
-	
+
 	@GetMapping("/read")
-	public ModelAndView selectBoard(ModelAndView mv
-			, Board board
-			, HttpSession session
-			, RedirectAttributes rattr
-			, @RequestParam(name="b_no") int b_no
-			) {
-		if(session.getAttribute("loginSSInfo") == null) {
+	public ModelAndView selectBoard(ModelAndView mv, Board board, HttpSession session, RedirectAttributes rattr,
+			@RequestParam(name = "b_no") int b_no) {
+		if (session.getAttribute("loginSSInfo") == null) {
 			rattr.addFlashAttribute("msg", "로그인 후 이용 가능합니다.");
-			mv.setViewName("redirect:member/login"); //로그인으로
+			mv.setViewName("redirect:member/login"); // 로그인으로
 			return mv;
 		}
 		service.updateCount(b_no);
@@ -185,44 +162,37 @@ public class BoardController {
 		mv.setViewName("board/read");
 		return mv;
 	}
-	
+
 	@GetMapping("/update")
-	public ModelAndView viewUpdateBoard(ModelAndView mv
-			, Board board
-			, HttpSession session
-			, RedirectAttributes rattr
-			, @RequestParam(name="b_no") int b_no
-			) {
-		if(session.getAttribute("loginSSInfo") == null) {
+	public ModelAndView viewUpdateBoard(ModelAndView mv, Board board, HttpSession session, RedirectAttributes rattr,
+			@RequestParam(name = "b_no") int b_no, @RequestParam(name = "b_title") String b_title,
+			@RequestParam(name = "b_content") String b_content) {
+		if (session.getAttribute("loginSSInfo") == null) {
 			rattr.addFlashAttribute("msg", "로그인 후 이용 가능합니다.");
-			mv.setViewName("member/login"); //로그인으로
+			mv.setViewName("member/login"); // 로그인으로
 			return mv;
 		}
 		mv.addObject("b_no", b_no);
+		mv.addObject("b_title", b_title);
+		mv.addObject("b_content", b_content);
 		mv.setViewName("board/update");
 		return mv;
 	}
-	
+
 	@PostMapping("/update")
-	public ModelAndView updateBoard(
-			HttpSession session
-			, ModelAndView mv
-			, RedirectAttributes rattr
-			, Board board
-			, @RequestParam(name="b_no") int b_no
-			, @RequestParam(name="b_title") String b_title
-			, @RequestParam(name="b_content") String b_content
-			) {
-		
+	public ModelAndView updateBoard(HttpSession session, ModelAndView mv, RedirectAttributes rattr, Board board,
+			@RequestParam(name = "b_no") int b_no, @RequestParam(name = "b_title") String b_title,
+			@RequestParam(name = "b_content") String b_content) {
+
 		board.setB_no(b_no);
 		board.setB_title(b_title);
 		board.setB_content(b_content);
-		
+
 		int result = service.updateBoard(board);
-		if(result == 1) {
+		if (result == 1) {
 			rattr.addFlashAttribute("msg", "글 수정에 성공했습니다.");
 			mv.setViewName("redirect:/");
-		} else { 
+		} else {
 			rattr.addFlashAttribute("msg", "게시글 수정에 실패했습니다. 게시판으로 돌아갑니다.");
 			mv.setViewName("redirect:/");
 		}
@@ -232,44 +202,36 @@ public class BoardController {
 		 * } else { rattr.addFlashAttribute("msg", "게시글 수정에 실패했습니다."); }
 		 */
 		return mv;
-		
-		
+
 	}
-	
+
 	@PostMapping("/delete")
-	public ModelAndView deleteBoard(
-			HttpSession session
-			, ModelAndView mv
-			, RedirectAttributes rattr
-			, @RequestParam(name="b_no") int b_no
-			) {
-		
+	public ModelAndView deleteBoard(HttpSession session, ModelAndView mv, RedirectAttributes rattr,
+			@RequestParam(name = "b_no") int b_no) {
+
 		int result = service.deleteBoard(b_no);
-		if(result == 1) {
+		if (result == 1) {
 			rattr.addFlashAttribute("msg", "글 삭제를 성공했습니다.");
 			mv.setViewName("redirect:/");
-		} else { 
+		} else {
 			rattr.addFlashAttribute("msg", "게시글 삭제를 실패했습니다. 게시판으로 돌아갑니다.");
 			mv.setViewName("redirect:/");
 		}
 		return mv;
-		
+
 	}
-	
+
 	@PostMapping("/comment/insert")
 	@ResponseBody
-	public String insertComment(HttpSession session
-			, Board board
-			, RedirectAttributes rattr
-			, @RequestParam(name="b_no") int b_no
-			, @RequestParam(name="c_no", required = false, defaultValue = "0") int refnum
-			, @RequestParam(name="c_comment") String c_comment
-			) {
-		if(session.getAttribute("loginSSInfo") == null) {
+	public String insertComment(HttpSession session, Board board, RedirectAttributes rattr,
+			@RequestParam(name = "b_no") int b_no,
+			@RequestParam(name = "c_no", required = false, defaultValue = "0") int refnum,
+			@RequestParam(name = "c_comment") String c_comment) {
+		if (session.getAttribute("loginSSInfo") == null) {
 			rattr.addFlashAttribute("msg", "로그인 후 이용 가능합니다.");
 			return "member/login";
 		}
-		Member loginSSInfo = (Member)session.getAttribute("loginSSInfo");
+		Member loginSSInfo = (Member) session.getAttribute("loginSSInfo");
 		board.setRefnum(refnum);
 		board.setB_no(b_no);
 		board.setM_id(loginSSInfo.getM_id());
@@ -279,30 +241,23 @@ public class BoardController {
 		List<Board> commentList = service.selectCommentList(b_no);
 		Gson gson = new GsonBuilder().setDateFormat("yyyy-MM-dd HH:mm:ss").create();
 		return gson.toJson(commentList);
-		
+
 	}
-	
+
 	@PostMapping("/comment/delete")
 	@ResponseBody
-	public String deleteComment(HttpSession session
-			, Board board
-			, @RequestParam(name="c_no") int c_no
-			, @RequestParam(name="b_no") int b_no
-			) {
+	public String deleteComment(HttpSession session, Board board, @RequestParam(name = "c_no") int c_no,
+			@RequestParam(name = "b_no") int b_no) {
 		service.deleteComment(c_no);
 		List<Board> commentList = service.selectCommentList(b_no);
 		Gson gson = new GsonBuilder().setDateFormat("yyyy-MM-dd HH:mm:ss").create();
 		return gson.toJson(commentList);
 	}
-	
+
 	@PostMapping("/comment/update")
 	@ResponseBody
-	public String updateComment(HttpSession session
-			, Board board
-			, @RequestParam(name="b_no") int b_no
-			, @RequestParam(name="c_no") int c_no
-			, @RequestParam(name="c_comment") String c_comment
-			) {
+	public String updateComment(HttpSession session, Board board, @RequestParam(name = "b_no") int b_no,
+			@RequestParam(name = "c_no") int c_no, @RequestParam(name = "c_comment") String c_comment) {
 		board.setC_no(c_no);
 		board.setC_comment(c_comment);
 		service.updateComment(board);
@@ -310,30 +265,26 @@ public class BoardController {
 		Gson gson = new GsonBuilder().setDateFormat("yyyy-MM-dd HH:mm:ss").create();
 		return gson.toJson(commentList);
 	}
-	
+
 	@PostMapping("/downloadExcelFile")
-	 public String downloadExcelFile(
-			 @RequestParam(name="list", required = false) List<Board> list
-			, @RequestParam(name="option", required = false, defaultValue = "0") int selectVal
-			, @RequestParam(name="searchOpt", required = false, defaultValue = "title") String searchOpt
-			, @RequestParam(name="searchVal", required = false) String searchVal
-			, Model model
-			 ) {
+	public String downloadExcelFile(@RequestParam(name = "list", required = false) List<Board> list,
+			@RequestParam(name = "option", required = false, defaultValue = "0") int selectVal,
+			@RequestParam(name = "searchOpt", required = false, defaultValue = "title") String searchOpt,
+			@RequestParam(name = "searchVal", required = false) String searchVal, Model model) {
 		RowBounds rowBounds = new RowBounds();
-		if(searchVal != null) {
+		if (searchVal != null) {
 			list = service.selectBoardList(searchVal, searchOpt, selectVal, rowBounds);
 		} else {
 			list = service.selectBoardList(selectVal, rowBounds);
-			
+
 		}
 		SXSSFWorkbook workbook = service.excelFileDownloadProcess(list);
-		
+
 		model.addAttribute("locale", Locale.KOREA);
 		model.addAttribute("workbook", workbook);
 		model.addAttribute("workbookName", "게시판");
 		return "excelDownloadView";
 	}
-	
 
 	/*
 	 * @GetMapping("/list") public ModelAndView selectNotice(ModelAndView mv,

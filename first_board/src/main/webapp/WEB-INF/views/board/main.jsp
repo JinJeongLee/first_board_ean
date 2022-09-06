@@ -138,22 +138,28 @@
 							<td style="width: 14%">작성일</td>
 							<td style="width: 6%">조회수</td>
 						</tr>
-						<c:forEach items="${boardList}" var="list">
-							<tr class="list">
-								<td >${list.b_no}</td>
-								<td >${list.bt_name}</td>
-								<td class="tb_read">${list.b_title}</td>
-								<td >${list.f_count}개</td>
-								<td >${list.b_writer}</td>
-								<td >${list.b_write_date}</td>
-								<td >${list.b_count}</td>
-							</tr>
-						</c:forEach>
+						<c:if test="${not empty boardList}">
+							<c:forEach items="${boardList}" var="list">
+								<tr class="list">
+									<td >${list.b_no}</td>
+									<td >${list.bt_name}</td>
+									<td class="tb_read">${list.b_title} [${list.c_count}]</td>
+									<td >${list.f_count}개</td>
+									<td >${list.b_writer}</td>
+									<td >${list.b_write_date}</td>
+									<td >${list.b_count}</td>
+								</tr>
+							</c:forEach>
+						</c:if>
+						<c:if test="${empty boardList}">
+							<tr><td colspan="7" >검색 결과가 존재하지 않습니다.</td></tr>
+						</c:if>
 					</table>
 					<div id="pageing_all">
 		                <div class="pageing">
 		                	<p id="p_c">
 		                		<c:if test="${not empty boardList}">
+		                			<a class="page page_first">처음</a>
 									<c:if test="${startPage > 1 }">
 										<a class="page page_prev">이전</a>
 									</c:if>
@@ -163,6 +169,7 @@
 									<c:if test="${endPage ne totalpageCnt}">
 										<a class="page page_post" >다음</a>
 									</c:if>
+									<a class="page page_last">마지막</a>
 								</c:if>
 							</p>
 		                </div>
@@ -171,12 +178,12 @@
 				<div class="board_main_box_content" id="search_box_button_container">
 					<div id="search_box_button">
 						
-							<select id="search_select" name="searchOpt">
+							<select id="search_select" name="searchOpt" value="${searchOpt}">
 								<option value="title">제목</option>
 								<option value="content">내용</option>
 								<option value="writer">작성자</option>
 							</select>
-							<input id="search_box" name="searchVal" type="text" placeholder="검색어를 입력해주세요.">
+							<input id="search_box" name="searchVal" type="text" placeholder="검색어를 입력해주세요." value="${searchVal}">
 							<button type="submit" class="btn_format_mini_gray">검색</button>
 					</div>
 				</div>
@@ -207,37 +214,17 @@ $(".tb_read").on("click", function(){
 // 엑셀 다운로드
 	$("#download_btn").on('click', function() {
 		$("#exelForm").submit();
-		<%-- var option = '${option}';
-		var searchVal = '${searchVal}';
-		var searchOpt = '${searchOpt}';
-		
-		$.ajax({
-            url: "downloadExcelFile",
-            data: {
-            	option : option
-            	, searchVal : searchVal
-            	, searchOpt : searchOpt
-            }
-            ,
-            type: "POST",
-            success: function(result){
-                console.log(result);
-                
-                document.getElementById('result').innerHTML = JSON.stringify(data);
-                location.href="<%= request.getContextPath()%>/?page=1&option="+option+"&searchOpt="+searchOpt+"&searchVal="+searchVal; 
-               
-                location.href="";
-            },
-            error: function(request, status, error) {
-				alert("파일 다운로드에 실패했습니다. 다시 시도해 주세요.");
-			}
-        }); --%>
 	});
+
+// 페이지 번호
+var js_page_no = (new URL(location.href).searchParams).get('page');
 
 // 핉터 정렬 
 	$("#board_type").on('change', function() {
 		var option = $('#board_type').val();
-		location.href="<%= request.getContextPath() %>/?page=1&option="+option;
+		var searchVal = '${searchVal}';
+		var searchOpt = '${searchOpt}';
+		location.href="<%= request.getContextPath() %>/?page=1&option="+option+"&searchOpt="+searchOpt+"&searchVal="+searchVal;
 	});
 	var urlOption = '${option}';
 	if(urlOption == '0') {
@@ -251,9 +238,6 @@ $(".tb_read").on("click", function(){
 	}else if(urlOption == '4'){
 		$('#board_type').val('4').prop('selected', true);
 	}
-
-// 페이지 번호
-var js_page_no = (new URL(location.href).searchParams).get('page');
 // 페이지처리
 $(".page").on('click', function() {
 		var option = $("#board_type").val();
@@ -267,6 +251,10 @@ $(".page").on('click', function() {
 				location.href="<%= request.getContextPath() %>/?page="+$(this).text()+"&option="+option+"&searchOpt="+searchOpt+"&searchVal="+searchVal;
 			} else if($(this).hasClass('page_post')) {
 				location.href="<%= request.getContextPath() %>/?page=${endPage+1}&option="+option+"&searchOpt="+searchOpt+"&searchVal="+searchVal;
+			} else if($(this).hasClass('page_first')) {
+				location.href="<%= request.getContextPath() %>/?page=1&option="+option+"&searchOpt="+searchOpt+"&searchVal="+searchVal;
+			} else if($(this).hasClass('page_last')) {
+				location.href="<%= request.getContextPath() %>/?page=${endPage}&option="+option+"&searchOpt="+searchOpt+"&searchVal="+searchVal;
 			}
 		} else{
 			if($(this).hasClass('page_prev')) {
@@ -275,6 +263,10 @@ $(".page").on('click', function() {
 				location.href="<%= request.getContextPath() %>/?page="+$(this).text()+"&option="+option;
 			} else if($(this).hasClass('page_post')) {
 				location.href="<%= request.getContextPath() %>/?page=${endPage+1}&option="+option;
+			} else if($(this).hasClass('page_first')) {
+				location.href="<%= request.getContextPath() %>/?page=1&option="+option;
+			} else if($(this).hasClass('page_last')) {
+				location.href="<%= request.getContextPath() %>/?page=${totalpageCnt}&option="+option;
 			}
 		} 
 	});

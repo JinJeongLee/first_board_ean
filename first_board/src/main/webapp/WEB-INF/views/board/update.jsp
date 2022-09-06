@@ -141,13 +141,13 @@
 			        </div>
 			        <form action="update" method="post">
 			        <div>
-			            <input id="board_title" name="b_title" type="text" placeholder="제목 입력">
+			            <input id="board_title" name="b_title" type="text" value="${b_title}">
 			        </div>
 			        <div id="board_content" class="font_title" >
 			            내용
 			        </div>
 			        <div id="textEditer">
-			            <textarea id="board_content1" name="b_content" placeholder="내용을 입력해 주세요."></textarea>
+			            <textarea id="board_content1" name="b_content" >${b_contentf}</textarea>
 			        	
 			        </div>
 			        <!--
@@ -187,15 +187,11 @@
 		<%-- location.href="<%= request.getContextPath()%>/"; --%>
 	})
 	
-////////날짜 유효성 ///////////
-//start input -> end min
-$("#att_date_start").on("input", function() {
-	$("#att_date_end").attr("min", $("#att_date_start").val());
-});
-
-// end input -> start max
-$("#att_date_end").on("input", function() {
-	$("#att_date_start").attr("max", $("#att_date_end").val());
+//////// 글 넣어두기 ///////////
+var title;
+var content
+$(function(){
+	
 });
 </script>
 </body>

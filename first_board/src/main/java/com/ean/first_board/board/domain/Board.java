@@ -62,6 +62,7 @@ public class Board {
 	public int c_level;  //댓글순위
 	public int c_ref;
 	public int c_seq;  //댓글 순서
+	public int c_count;
 	
 	@Override
 	public String toString() {
@@ -71,7 +72,7 @@ public class Board {
 				+ ", f_rename_filename=" + f_rename_filename + ", f_date=" + f_date + ", f_count=" + f_count
 				+ ", file_list=" + file_list + ", c_no=" + c_no + ", c_writer=" + c_writer + ", c_write_date="
 				+ c_write_date + ", c_comment=" + c_comment + ", refnum=" + refnum + ", c_level=" + c_level + ", c_ref="
-				+ c_ref + ", c_seq=" + c_seq + "]";
+				+ c_ref + ", c_seq=" + c_seq + ", c_count=" + c_count + "]";
 	}
 
 	public Board() {
@@ -261,6 +262,14 @@ public class Board {
 
 	public void setC_seq(int c_seq) {
 		this.c_seq = c_seq;
+	}
+
+	public int getC_count() {
+		return c_count;
+	}
+
+	public void setC_count(int c_count) {
+		this.c_count = c_count;
 	}
 	
 	

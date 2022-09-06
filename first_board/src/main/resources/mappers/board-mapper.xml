@@ -33,10 +33,11 @@
  -->
  <!-- 게시글 목록조회~ -->
 <select id="selectBoardList" resultType="Board" parameterType="hashmap">
-	select b.*, t.bt_name, fb.f_count
+	select b.*, t.bt_name, fb.f_count, fc.c_count
 	from tb_board b
 	left outer join tb_board_type t on b.bt_no = t.bt_no
     left outer join (select count (*) f_count, f.b_no from tb_file f group by f.b_no) fb on fb.b_no = b.b_no
+    left outer join (select count (*) c_count, c.b_no from tb_comment c group by c.b_no)fc on fc.b_no = b.b_no
     <if test='selectVal != 0'>
     	where b.bt_no=#{selectVal}
     	<if test='searchVal != null and searchOpt.equals("title")'>
